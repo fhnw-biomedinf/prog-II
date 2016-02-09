@@ -1,1 +1,3 @@
-= prog-II
+= Programming II
+
+You hit the repo – the actual site is here: https://fhnw-biomedinf.github.io/prog-II
