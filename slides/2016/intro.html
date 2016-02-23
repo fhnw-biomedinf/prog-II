@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><title>Programmieren II</title><meta content="yes" name="apple-mobile-web-app-capable" /><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" /><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport" /><link href="reveal.js/css/reveal.css" rel="stylesheet" /><link rel="stylesheet" href="reveal.js/css/theme/solarized.css" id="theme" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" /><style>/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+/*pre.CodeRay {background-color:#f7f7f8;}*/
+.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
+.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
+table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
+table.CodeRay td{vertical-align: top;line-height:1.45}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
+table.CodeRay td.code{padding:0 0 0 .5em}
+table.CodeRay td.code>pre{padding:0}
+.CodeRay .debug{color:#fff !important;background:#000080 !important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:#000080}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:#008080}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#000}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:#008080}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:#008080}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}</style><link href="reveal.js/lib/css/zenburn.css" rel="stylesheet" /><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script><!-- Customizes slide appearance -->
+<style>
+
+    .reveal .slides {
+        text-align: left;
+    }
+
+    .reveal .slides section > * {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .reveal p {
+        line-height: 1;
+    }
+
+    .reveal pre {
+        width: 100%;
+        margin: auto;
+    }
+
+    .reveal section img {
+        border: none;
+        box-shadow: none;
+    }
+
+    .smaller div, .smaller ul, .smaller p {
+        font-size: 0.8em;
+    }
+
+    .small-table td p {
+        margin: 0;
+        font-size: small;
+    }
+
+    .ulist p {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .white {
+        color: white;
+    }
+
+    .solarized-blue {
+        color: #78bae6;
+    }
+
+    .solarized-violet {
+        color: #6c71c4;
+    }
+
+    .solarized-green {
+        color: #859900;
+    }
+
+</style></head><body><div class="reveal"><div class="slides"><section><h1>Programmieren II</h1><div class="paragraph"><p>Rahel Lüthy<br />
+<a href="mailto:rahel.luethy@fhnw.ch">rahel.luethy@fhnw.ch</a></p></div>
+<div class="paragraph"><p>24. Februar 2016</p></div><p><small></small></p></section>
+<section id="dozierende"><h2>Dozierende</h2><div class="paragraph"><p><strong>Prof. Dr. Dominique Brodbeck</strong></p></div>
+<div class="paragraph"><p><strong>Rahel Lüthy</strong></p></div>
+<div class="paragraph"><p><br />
+Forschung &amp; Entwicklung am Institut für Medizinal- und Analysetechnologie:</p></div>
+<div class="ulist"><ul><li><p>Prozessierung grosser Datenmengen</p></li><li><p>Visualisierung komplexer Zusammenhänge</p></li><li><p>Software in Java</p></li></ul></div></section>
+<section id="was-bisher-geschah"><h2>Was bisher geschah&#8230;&#8203;</h2><div class="ulist"><ul><li><p>Einführung in die Programmierung mit Java</p></li><li><p>Anwenden der grundlegenden Elemente</p><div class="ulist"><ul><li><p>Datentypen</p></li><li><p>Variabeln</p></li><li><p>Methoden</p></li><li><p>Programmkontrolle (Verzweigungen, Schleifen)</p></li></ul></div></li><li><p>Kennenlernen einer Entwicklungsumgebung (IDE)</p></li><li><p>Erstellen von einfachen Programmen</p></li></ul></div></section>
+<section id="wie-geht-s-weiter"><h2>Wie geht&#8217;s weiter?</h2><div class="ulist"><ul><li><p>Java Standardbibliothek (Collections, I/O)</p></li><li><p>Objekt-orientierte Programmierung (OOP)</p></li><li><p>Funktionale Programmierung (FP)</p></li><li><p>Grafische Benutzeroberflächen (GUIs)</p></li><li><p>Erstellen von einfachen Applikationen</p></li></ul></div></section>
+<section id="span-class-white-oop-fp-span" data-background="images/bernina.jpg"><h2><span class="white">OOP &amp; FP</span></h2></section>
+<section id="das-problem"><h2>Das Problem</h2><div class="ulist"><ul><li><p>Duplikationen sind unerwünscht</p></li><li><p>Code wird schnell umfangreich, komplex &amp; unüberblickbar</p></li><li><p>Code verändert sich</p></li></ul></div>
+<div class="paragraph smaller"><p>z.B. Minecraft Update 1.7: 500'000 geänderte Codezeilen</p></div></section>
+<section id="span-class-white-die-lösung-span" data-background="images/lego.jpg"><h2><span class="white">Die Lösung</span></h2></section>
+<section id="divide-conquer"><h2>Divide &amp; Conquer</h2><div class="ulist"><ul><li><p>Klassen &amp; Funktionen als Bausteine</p></li><li><p>Einzelne Bausteine klein &amp; überblickbar</p></li><li><p>Klares Design ermöglicht <em>Composability</em></p></li></ul></div>
+<div class="paragraph"><p><br /></p></div>
+<div class="imageblock" style="text-align: right"><div class="content"><img src="./images/lego-dimensions.png" alt="lego dimensions" width="50%" /></div></div></section>
+<section id="viele-wege-führen-nach-rom"><h2>Viele Wege führen nach Rom</h2><div class="ulist"><ul><li><p>OOP ist eine Variante <a href="https://en.wikipedia.org/wiki/Comparison_of_multi-paradigm_programming_languages">unter vielen</a></p></li><li><p>FP wieder im Aufwind</p></li></ul></div>
+<div class="imageblock" style="text-align: right"><div class="content"><img src="./images/function.png" alt="function" /></div></div></section>
+<section id="die-gute-nachricht" data-background="#78bae6"><h2>Die gute Nachricht</h2><div class="paragraph white"><p>Ab Java 8 lassen sich OOP und FP kombinieren</p></div></section>
+<section id="lernziele"><h2>Lernziele</h2><div class="paragraph"><p>Sie kennen&#8230;&#8203;</p></div>
+<div class="ulist"><ul><li><p>die Grundlagen der Java Programmiersprache</p></li><li><p>die Konzepte der objekt-orientierten Programmierung</p></li><li><p>die Konzepte der funktionalen Programmierung</p></li><li><p>die wichtigste Funktionalität der Java Standardbibliothek</p></li></ul></div></section>
+<section id="projekt" data-background="#78bae6"><h2>Projekt</h2><div class="paragraph white"><p>Sie können dieses Wissen anwenden, um eine einfache Applikation zu erstellen</p></div></section>
+<section id="der-weg-zum-ziel"><h2>Der Weg zum Ziel</h2><div class="ulist"><ul><li><p><span class="solarized-blue">Selbststudium</span></p><div class="ulist"><ul><li><p>Lesen der Theorie</p></li><li><p>Prüfungsvorbereitung</p></li></ul></div></li><li><p><span class="solarized-violet">Praktikum</span></p><div class="ulist"><ul><li><p>Individuelles Arbeiten an Übungen/Projekt</p></li><li><p>Dozierende beantworten Fragen</p></li></ul></div></li><li><p><span class="solarized-green">Frontalunterricht</span></p><div class="ulist"><ul><li><p>Vertiefung des Stoffes</p></li><li><p>Live Programming (Lösungen, Tipps &amp; Tricks)</p></li></ul></div></li></ul></div></section>
+<section id="ablauf-lektion"><h2>Ablauf Lektion</h2><table class="tableblock frame-all grid-all" style="width:100%"><colgroup><col style="width:25%" /><col style="width:75%" /></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><p class="tableblock">zu Hause</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">Selbststudium</span> · <span class="solarized-violet">Praktikum</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">11:35-12:20</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">Selbststudium</span> · <span class="solarized-violet">Praktikum</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">12:45-13:30</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">Frontalunterricht</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">13:40-14:25</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">Selbststudium</span> · <span class="solarized-violet">Praktikum</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">zu Hause</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">Selbststudium</span> · <span class="solarized-violet">Praktikum</span></p></td></tr></tbody></table></section>
+<section id="ablauf-semester"><h2>Ablauf Semester</h2><table class="tableblock frame-all grid-all small-table" style="width:100%"><colgroup><col style="width:8%" /><col style="width:16%" /><col style="width:58%" /><col style="width:16%" /></colgroup><tbody><tr><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">15.02.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">Fasnacht</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">22.02.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Einführung</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">29.02.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Data Structures</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">07.03.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Input/Output</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">14.03.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">OOP &amp; FP</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">21.03.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">OOP &amp; FP</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">28.03.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">Ferien</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">04.04.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">GUI</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">DB</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">11.04.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">GUI</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">DB</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">18.04.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Drawing</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">DB</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">25.04.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekteinführung</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">02.05.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekt</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">09.05.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekt</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">16.05.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekt</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">13</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">23.05.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekt</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">14</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">30.05.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekt</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">06.06.2016</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Zusammenfassung</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">RL</span></p></td></tr><tr><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td></tr></tbody></table></section>
+<section id="aufwand"><h2>Aufwand</h2><table class="tableblock frame-all grid-all small-table" style="width:100%"><colgroup><col style="width:14%" /><col style="width:28%" /><col style="width:14%" /><col style="width:14%" /><col style="width:14%" /><col style="width:14%" /></colgroup><tbody><tr><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">Selbststudium</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">Praktikum</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">Frontalunterricht</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Total Lektionen</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Einführung</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Data Structures</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Input/Output</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">OOP &amp; FP</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">OOP &amp; FP</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">GUI</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">GUI</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Drawing</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekteinführung</p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■■■■</span></p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekt</p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■■■■</span></p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekt</p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■■■■</span></p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekt</p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■■■■</span></p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">13</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekt</p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■■■■</span></p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">14</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Projekt</p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-violet">■■■■■</span></p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Zusammenfassung</p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-green">■■</span></p></td><td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td></tr><tr><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock">Prüfungsvorbereitung</p></td><td class="tableblock halign-left valign-top"><p class="tableblock"><span class="solarized-blue">■■■■■■■■■■■■■■■■■■</span></p></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock">18</p></td></tr><tr><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top"><p class="tableblock"><strong>90</strong></p></td></tr></tbody></table></section>
+<section id="links"><h2>Links</h2><div class="paragraph"><p><strong>GitHub</strong>: <a href="http://fhnw-biomedinf.github.io/prog-II" class="bare">http://fhnw-biomedinf.github.io/prog-II</a></p></div>
+<div class="ulist"><ul><li><p>Unterrichtsmaterial</p></li><li><p>Übungen</p></li><li><p>Slides</p></li></ul></div>
+<div class="paragraph"><p><strong>Moodle</strong>: <a href="https://moodle.fhnw.ch" class="bare">https://moodle.fhnw.ch</a></p></div>
+<div class="ulist"><ul><li><p>Modulinformationen</p></li><li><p>Lösungen</p></li><li><p>Projektabgabe</p></li></ul></div></section>
+<section id="note" data-background="#78bae6"><h2>Note</h2><div class="paragraph white"><p>50% Projekt</p></div>
+<div class="paragraph white"><p>50% Prüfung</p></div></section>
+<section id="span-class-white-fragen-span" data-background="images/zen.jpg"><h2><span class="white">Fragen?</span></h2></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Reveal.initialize({
+  // Display controls in the bottom right corner
+  controls: true,
+  // Display a presentation progress bar
+  progress: true,
+  // Display the page number of the current slide
+  slideNumber: true,
+  // Push each slide change to the browser history
+  history: true,
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+  // Enable the slide overview mode
+  overview: true,
+  // Vertical centering of slides
+  center: false,
+  // Enables touch navigation on devices with touch input
+  touch: true,
+  // Loop the presentation
+  loop: false,
+  // Change the presentation direction to be RTL
+  rtl: false,
+  // Turns fragments on and off globally
+  fragments: true,
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+  // Enable slide navigation via mouse wheel
+  mouseWheel: false,
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+  // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
+  // NOTE setting the theme in the config no longer works in reveal.js 3.x
+  //theme: Reveal.getQueryHash().theme || 'solarized',
+  // Transition style (e.g., none, fade, slide, convex, concave, zoom)
+  transition: Reveal.getQueryHash().transition || 'linear',
+  // Transition speed (e.g., default, fast, slow)
+  transitionSpeed: 'default',
+  // Transition style for full page slide backgrounds (e.g., none, fade, slide, convex, concave, zoom)
+  backgroundTransition: 'fade',
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+  // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
+  parallaxBackgroundImage: '',
+  // Parallax background size in CSS syntax (e.g., "2100px 900px")
+  parallaxBackgroundSize: '',
+
+  // The "normal" size of the presentation, aspect ratio will be preserved
+  // when the presentation is scaled to fit different resolutions. Can be
+  // specified using percentage units.
+  width: 960,
+  height: 700,
+
+  // Factor of the display size that should remain empty around the content
+  margin: 0.1,
+
+  // Bounds for smallest/largest possible scale to apply to content
+  minScale: 0.2,
+  maxScale: 1.5,
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+      { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      
+      { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});</script></body></html>
