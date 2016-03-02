@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>Programming II</h1>
 <div class="details">
 <span id="author" class="author">Dominique Brodbeck &amp; Rahel Lüthy · Fachhochschule Nordwestschweiz · 2016</span><br>
-<span id="revnumber">version 1.0.5</span>
+<span id="revnumber">version 1.1.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -543,6 +543,14 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_the_collections_helper">2.6. The Collections Helper</a></li>
 <li><a href="#section-stream-api">2.7. The Java 8 Stream API</a></li>
 <li><a href="#_resources_2">2.8. Resources</a></li>
+</ul>
+</li>
+<li><a href="#input-output">3. Input / Output</a>
+<ul class="sectlevel2">
+<li><a href="#_reading_text_with_a_scanner">3.1. Reading Text with a Scanner</a></li>
+<li><a href="#_creating_formatting_text">3.2. Creating &amp; Formatting Text</a></li>
+<li><a href="#_writing_text_with_a_printwriter">3.3. Writing Text with a PrintWriter</a></li>
+<li><a href="#_resources_3">3.4. Resources</a></li>
 </ul>
 </li>
 </ul>
@@ -1363,11 +1371,263 @@ Oracle Technology Network: Processing Data with Java SE 8 Streams
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="input-output">3. Input / Output</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this chapter you will learn how to read and write textual data. You will use the <code>Scanner</code>
+class to read textual input, and the <code>PrintWriter</code> class to output data back to file.</p>
+</div>
+<div class="sect2">
+<h3 id="_reading_text_with_a_scanner">3.1. Reading Text with a Scanner</h3>
+<div class="paragraph">
+<p>The <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html"><code>Scanner</code></a> class allows to read textual input:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> input = <span class="string"><span class="delimiter">&quot;</span><span class="content">Mary had a little lamb</span><span class="delimiter">&quot;</span></span>;
+
+<span class="predefined-type">Scanner</span> scanner = <span class="keyword">new</span> <span class="predefined-type">Scanner</span>(<span class="keyword">new</span> <span class="predefined-type">StringReader</span>(input));
+<span class="keyword">while</span> (scanner.hasNext()) {
+    <span class="predefined-type">System</span>.out.println(scanner.next());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will print:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Mary
+had
+a
+little
+lamb</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each <code>Scanner</code> instance can be configured in how it breaks input into tokens. Various <code>hasNextXXX()</code> and <code>nextXXX()</code>
+methods allow to parse different value types. The following example demonstrates how to parse <code>double</code> values separated
+by a dash (<code>-</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> input = <span class="string"><span class="delimiter">&quot;</span><span class="content">0.1-42.0-99.9</span><span class="delimiter">&quot;</span></span>;
+
+<span class="predefined-type">Scanner</span> scanner = <span class="keyword">new</span> <span class="predefined-type">Scanner</span>(<span class="keyword">new</span> <span class="predefined-type">StringReader</span>(input));
+scanner.useDelimiter(<span class="string"><span class="delimiter">&quot;</span><span class="content">-</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">List</span>&lt;<span class="predefined-type">Double</span>&gt; values = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;();
+<span class="keyword">while</span> (scanner.hasNextDouble()) {
+    values.add(scanner.nextDouble());
+}
+<span class="predefined-type">System</span>.out.println(values);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Multi-line input can be parsed by making use of the <code>hasNextLine()</code> and <code>nextLine()</code> methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> input =
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">line 1</span><span class="char">\n</span><span class="delimiter">&quot;</span></span> +
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">line 2</span><span class="char">\n</span><span class="delimiter">&quot;</span></span> +
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">line 3</span><span class="delimiter">&quot;</span></span>;
+
+<span class="predefined-type">Scanner</span> scanner = <span class="keyword">new</span> <span class="predefined-type">Scanner</span>(<span class="keyword">new</span> <span class="predefined-type">StringReader</span>(input));
+<span class="keyword">while</span> (scanner.hasNextLine()) {
+    <span class="predefined-type">System</span>.out.println(scanner.nextLine());
+    <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">––––––</span><span class="delimiter">&quot;</span></span>);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which will print:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>line 1
+––––––
+line 2
+––––––
+line 3
+––––––</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In all examples so far we were reading input from a <code>String</code> variable. In reality, data is often read from a file on disk.
+The <a href="http://docs.oracle.com/javase/8/docs/api/java/io/File.html"><code>File</code></a> class can be used to represent such a file.
+Note that the actual scanning logic stays exactly the same as before. However, things can go wrong when working with files,
+that&#8217;s why a <code>try/catch</code> exception handling construct is needed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">File</span> inputFile = <span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">input.txt</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">try</span> (<span class="predefined-type">Scanner</span> scanner = <span class="keyword">new</span> <span class="predefined-type">Scanner</span>(inputFile)) {
+    <span class="keyword">while</span> (scanner.hasNext()) {
+        <span class="predefined-type">System</span>.out.println(scanner.next());
+    }
+} <span class="keyword">catch</span> (<span class="exception">FileNotFoundException</span> e) {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Reading file failed: </span><span class="delimiter">&quot;</span></span> + e.getMessage());
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Have a look at the official <a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html">Oracle Tutorial</a>
+if you would like to learn more about the concept of exceptions.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creating_formatting_text">3.2. Creating &amp; Formatting Text</h3>
+<div class="paragraph">
+<p>When dealing with text, <code>String</code> values are often created via successive concatenation, i.e. by
+repeatedly appending fragments. This can most elegantly be achieved via the
+<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html"><code>StringBuilder</code></a> class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">StringBuilder</span> result = <span class="keyword">new</span> <span class="predefined-type">StringBuilder</span>();
+<span class="keyword">for</span> (<span class="predefined-type">String</span> name : <span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">Lisa</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Bob</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Hillary</span><span class="delimiter">&quot;</span></span>)) {
+    result.append(name).append(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>);
+}
+<span class="predefined-type">System</span>.out.println(result);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which will print:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Lisa
+Bob
+Hillary</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>String.format</code> helper method allows to write out values in a specific format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; numbers = <span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">one</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">two</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">three</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">StringBuilder</span> result = <span class="keyword">new</span> <span class="predefined-type">StringBuilder</span>();
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="integer">0</span>; i &lt; numbers.size(); i++) {
+    <span class="predefined-type">String</span> formatted = <span class="predefined-type">String</span>.format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%d %S</span><span class="delimiter">&quot;</span></span>, i, numbers.get(i));
+    result.append(formatted).append(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>);
+}
+<span class="predefined-type">System</span>.out.println(result);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which will print:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>0 ONE
+1 TWO
+2 THREE</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_writing_text_with_a_printwriter">3.3. Writing Text with a PrintWriter</h3>
+<div class="paragraph">
+<p>The <a href="http://docs.oracle.com/javase/8/docs/api/java/io/PrintWriter.html"><code>PrintWriter</code></a> class can be used to write text
+to a file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">File</span> outputFile = <span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">out.txt</span><span class="delimiter">&quot;</span></span>);
+<span class="keyword">try</span> (<span class="predefined-type">PrintWriter</span> writer = <span class="keyword">new</span> <span class="predefined-type">PrintWriter</span>(outputFile)) {
+    writer.print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World</span><span class="delimiter">&quot;</span></span>);
+} <span class="keyword">catch</span> (<span class="exception">FileNotFoundException</span> e) {
+    <span class="predefined-type">System</span>.err.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Writing file failed: </span><span class="delimiter">&quot;</span></span> + e.getMessage());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As seen before, interacting with the <code>File</code> class can lead to exceptions. The <code>try/catch</code> clause is taking care of
+properly handling the error scenario. In addition, constructing the <code>PrintWriter</code> in the <code>try()</code> statement makes sure
+that it is properly flushed and closed once we are done working with it.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resources_3">3.4. Resources</h3>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Scanner
+</td>
+<td class="hdlist2">
+<p><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html" class="bare">http://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+File
+</td>
+<td class="hdlist2">
+<p><a href="http://docs.oracle.com/javase/8/docs/api/java/io/File.html" class="bare">http://docs.oracle.com/javase/8/docs/api/java/io/File.html</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Exceptions
+</td>
+<td class="hdlist2">
+<p><a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html" class="bare">https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+StringBuilder
+</td>
+<td class="hdlist2">
+<p><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html" class="bare">http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Format String Syntax
+</td>
+<td class="hdlist2">
+<p><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#syntax" class="bare">http://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#syntax</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+PrintWriter
+</td>
+<td class="hdlist2">
+<p><a href="http://docs.oracle.com/javase/8/docs/api/java/io/PrintWriter.html" class="bare">http://docs.oracle.com/javase/8/docs/api/java/io/PrintWriter.html</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+try-with-resource
+</td>
+<td class="hdlist2">
+<p><a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html" class="bare">https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html</a></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.5<br>
-Last updated 2016-02-23 08:35:37 +01:00
+Version 1.1.0<br>
+Last updated 2016-03-02 09:50:02 +01:00
 </div>
 </div>
 </body>
