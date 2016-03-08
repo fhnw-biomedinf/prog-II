@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>Programming II</h1>
 <div class="details">
 <span id="author" class="author">Dominique Brodbeck &amp; Rahel Lüthy · Fachhochschule Nordwestschweiz · 2016</span><br>
-<span id="revnumber">version 1.1.1</span>
+<span id="revnumber">version 1.2.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -551,6 +551,16 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_creating_formatting_text">3.2. Creating &amp; Formatting Text</a></li>
 <li><a href="#_writing_text_with_a_printwriter">3.3. Writing Text with a PrintWriter</a></li>
 <li><a href="#_resources_3">3.4. Resources</a></li>
+</ul>
+</li>
+<li><a href="#oop">4. Object-Oriented Programming</a>
+<ul class="sectlevel2">
+<li><a href="#_classes_objects">4.1. Classes &amp; Objects</a></li>
+<li><a href="#_composition">4.2. Composition</a></li>
+<li><a href="#_inheritance">4.3. Inheritance</a></li>
+<li><a href="#_enum_types">4.4. Enum Types</a></li>
+<li><a href="#_interfaces">4.5. Interfaces</a></li>
+<li><a href="#_resources_4">4.6. Resources</a></li>
 </ul>
 </li>
 </ul>
@@ -1623,11 +1633,1063 @@ try-with-resource
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="oop">4. Object-Oriented Programming</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The chapter on <a href="#data-structures">Data Structures</a> explained how data can be stored in collections.
+A <code>List&lt;String&gt;</code> e.g. allows to keep track of text values.
+But what if we want to store more heterogeneous values?
+We cannot use a <code>List</code> to keep track of a person&#8217;s name, a phone number, and a city or residence.
+Even if we could stuff a mixture of text values and numbers into a list, we would actually prefer a <code>List&lt;Person&gt;</code>, right?
+But unfortunately, the Java standard library does not offer a <code>Person</code> class.</p>
+</div>
+<div class="paragraph">
+<p>The following sections explain how we can write classes like <code>Person</code> ourselves.
+Classes represent the core building blocks in Java.
+As an object-oriented language, Java uses the concepts of <em>composition</em> and <em>inheritance</em> to create programs out of these building blocks.</p>
+</div>
+<div class="sect2">
+<h3 id="_classes_objects">4.1. Classes &amp; Objects</h3>
+<div class="paragraph">
+<p>In the real world, we tend to group <em>things</em> into different categories, e.g. "Emma" is a person, while "Milo" is a dog, and "Basel" is a city.
+In Java, person, dog, and city are known as <em>classes</em>, while "Emma", "Milo", and "Basel" are <em>objects</em>.</p>
+</div>
+<div class="paragraph">
+<p>Taking the city as an example, suppose you would like to build a catalogue of cities.
+Each city can be described by a name and a ZIP code.
+The following code shows how to model this data structure with a custom <code>City</code> class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">final</span> <span class="type">class</span> <span class="class">City</span> { <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> name; <i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="directive">private</span> <span class="directive">final</span> <span class="type">int</span> zipCode; <i class="conum" data-value="2"></i><b>(2)</b>
+
+    <span class="directive">public</span> City(<span class="predefined-type">String</span> name, <span class="type">int</span> zipCode) { <i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="local-variable">this</span>.name = name;
+        <span class="local-variable">this</span>.zipCode = zipCode;
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">String</span> getName() { <i class="conum" data-value="4"></i><b>(4)</b>
+        <span class="keyword">return</span> name;
+    }
+
+    <span class="directive">public</span> <span class="type">int</span> getZipCode() { <i class="conum" data-value="4"></i><b>(4)</b>
+        <span class="keyword">return</span> zipCode;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The class declaration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Two <em>fields</em> (sometimes also known as <em>instance variables</em> or <em>properties</em>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A <em>constructor</em> (accepting two <em>parameters</em> or <em>arguments</em>, assigning them to the <em>fields</em>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Two <em>methods</em> (specifically, two <em>accessor</em> methods)</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>public</code>/<code>private</code> and <code>final</code> keywords ensure that the class is well encapsulated and immutable.
+These aspects are not important in small programs.
+In larger applications, they prevent certain categories of errors and make the code base more maintainable.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see how the <code>City</code> class can be used – or in Java lingo: how it can be instantiated.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The terms <em>"creating an object of"</em>, <em>"instantiating"</em>, or <em>"creating an instance of"</em> are all synonymous.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">City basel = <span class="keyword">new</span> City(<span class="string"><span class="delimiter">&quot;</span><span class="content">Basel</span><span class="delimiter">&quot;</span></span>, <span class="integer">4000</span>);
+City zurich = <span class="keyword">new</span> City(<span class="string"><span class="delimiter">&quot;</span><span class="content">Zurich</span><span class="delimiter">&quot;</span></span>, <span class="integer">8000</span>);
+City muttenz = <span class="keyword">new</span> City(<span class="string"><span class="delimiter">&quot;</span><span class="content">Muttenz</span><span class="delimiter">&quot;</span></span>, <span class="integer">4132</span>);
+
+<span class="predefined-type">System</span>.out.println(basel.getName());      <span class="comment">// prints &quot;Basel&quot;</span>
+<span class="predefined-type">System</span>.out.println(muttenz.getZipCode()); <span class="comment">// prints 4132</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>new</code> keyword creates an instance of a class by calling the <em>constructor</em> which matches the number and types of the given <em>arguments</em>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_composition">4.2. Composition</h3>
+<div class="paragraph">
+<p>Our <code>City</code> class is composed of two fields, a <code>name</code> and a <code>zipCode</code>.
+The <code>name</code> field is of type <code>String</code>, which is itself a class.
+This is the simplest form of class re-use: We built a new class <code>City</code> by composing it of an existing building block, the <code>String</code> class.</p>
+</div>
+<div class="paragraph">
+<p>The same approach can be used with custom classes.
+The following class defines a <code>Person</code> by re-using our own <code>City</code> class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Person</span> {
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> firstName;
+    <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> lastName;
+    <span class="directive">private</span> <span class="directive">final</span> City city;
+
+    <span class="directive">public</span> Person(<span class="predefined-type">String</span> firstName, <span class="predefined-type">String</span> lastName, City city) {
+        <span class="local-variable">this</span>.firstName = firstName;
+        <span class="local-variable">this</span>.lastName = lastName;
+        <span class="local-variable">this</span>.city = city;
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">String</span> getFirstName() {
+        <span class="keyword">return</span> firstName;
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">String</span> getLastName() {
+        <span class="keyword">return</span> lastName;
+    }
+
+    <span class="directive">public</span> City getCity() {
+        <span class="keyword">return</span> city;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When creating a <code>Person</code> instance, an existing <code>City</code> instance is passed to the <code>Person</code> constructor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">City basel = <span class="keyword">new</span> City(<span class="string"><span class="delimiter">&quot;</span><span class="content">Basel</span><span class="delimiter">&quot;</span></span>, <span class="integer">4000</span>);
+Person gigi = <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">&quot;</span><span class="content">Gisela</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Oeri</span><span class="delimiter">&quot;</span></span>, basel);
+
+<span class="predefined-type">System</span>.out.println(gigi.getFirstName());         <span class="comment">// prints &quot;Gisela&quot;</span>
+<span class="predefined-type">System</span>.out.println(gigi.getCity().getZipCode()); <span class="comment">// prints 4000</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>getCity().getZipCode()</code> chain reflects the hierarchical nature of class composition.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now our building blocks are complete enough to address the initial problem, the wish for a list of persons:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">City basel = <span class="keyword">new</span> City(<span class="string"><span class="delimiter">&quot;</span><span class="content">Basel</span><span class="delimiter">&quot;</span></span>, <span class="integer">4000</span>);
+Person gigi = <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">&quot;</span><span class="content">Gisela</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Oeri</span><span class="delimiter">&quot;</span></span>, basel);
+Person eva = <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">&quot;</span><span class="content">Eva</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Herzog</span><span class="delimiter">&quot;</span></span>, basel);
+
+<span class="predefined-type">List</span>&lt;Person&gt; persons = <span class="predefined-type">Arrays</span>.asList(gigi, eva);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_inheritance">4.3. Inheritance</h3>
+<div class="paragraph">
+<p>As seen in the previous section, the technique of <strong>composition</strong> is used to model <em>"has a"</em> relationships: A person <em>has a</em> city of residence, a city <em>has a</em> name.
+This section will explain <strong>inheritance</strong>, a technique to express an <em>"is a"</em> relationship.</p>
+</div>
+<div class="paragraph">
+<p>Starting from our <code>Person</code> class, we can declare a new class <code>Student</code> which <em>is a</em> special kind of person:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Student</span> <span class="directive">extends</span> Person { <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="type">int</span> semester; <i class="conum" data-value="2"></i><b>(2)</b>
+
+    <span class="directive">public</span> Student(<span class="predefined-type">String</span> firstName, <span class="predefined-type">String</span> lastName, City city, <span class="type">int</span> semester) { <i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="local-variable">super</span>(firstName, lastName, city);  <i class="conum" data-value="4"></i><b>(4)</b>
+        <span class="local-variable">this</span>.semester = semester; <i class="conum" data-value="5"></i><b>(5)</b>
+    }
+
+    <span class="directive">public</span> <span class="type">int</span> getSemester() { <i class="conum" data-value="6"></i><b>(6)</b>
+        <span class="keyword">return</span> semester;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>extends</code> keyword specifies that <code>Student</code> inherits all aspects of a <code>Person</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A <em>field</em> (in addition to all fields inherited from <code>Person</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A <em>constructor</em> to create <code>Student</code> instances</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>A call to the <em>super constructor</em> (which initializes the <code>Person</code> base class)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Initialization of the <code>semester</code> field from the constructor argument</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>An <em>accessor method</em> to the <code>semester</code> field</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In this inheritance hierarchy, <code>Person</code> is referred to as the <em>base-class</em>.
+<code>Person</code> is the <em>super-class</em> of <code>Student</code>, while <code>Student</code> is a <em>sub-class</em> of <code>Person</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Using the <code>Student</code> class is straight forward.
+Instances of <code>Student</code> offer all functionality of the base-class <code>Person</code>, <strong>plus</strong> additional functionality like the <code>getSemester()</code> accessor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">City city = <span class="keyword">new</span> City(<span class="string"><span class="delimiter">&quot;</span><span class="content">Wherever</span><span class="delimiter">&quot;</span></span>, <span class="integer">9999</span>);
+Student harry = <span class="keyword">new</span> Student(<span class="string"><span class="delimiter">&quot;</span><span class="content">Harry</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Potter</span><span class="delimiter">&quot;</span></span>, city, <span class="integer">3</span>);
+
+<span class="predefined-type">System</span>.out.println(harry.getFirstName()); <span class="comment">// prints &quot;Harry&quot;</span>
+<span class="predefined-type">System</span>.out.println(harry.getSemester());  <span class="comment">// prints 3</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One thing to note is that the class inheritance hierarchy defines how objects can be assigned to differently typed variables.
+The <em>"is a"</em> metaphor is a good indication of whether an assignment is allowed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">City city = <span class="keyword">new</span> City(<span class="string"><span class="delimiter">&quot;</span><span class="content">Wherever</span><span class="delimiter">&quot;</span></span>, <span class="integer">9999</span>);
+Student harry = <span class="keyword">new</span> Student(<span class="string"><span class="delimiter">&quot;</span><span class="content">Harry</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Potter</span><span class="delimiter">&quot;</span></span>, city, <span class="integer">3</span>);
+Person bill = <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bill</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Gates</span><span class="delimiter">&quot;</span></span>, city);
+
+Person person;
+Student student;
+
+person = bill;       <span class="comment">// bill is a person</span>
+person = harry;      <span class="comment">// harry is a person</span>
+
+student = harry;     <span class="comment">// harry is a student</span>
+<span class="comment">// student = bill;   // DOES NOT COMPILE – bill is NOT a student</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>While it is very convenient to inherit the properties and behavior of a base-class, it is sometimes desirable to deviate in certain aspects.
+The concept of <strong>overriding</strong> allows a sub-class to change the behavior of certain methods.
+Let&#8217;s change the <code>Student</code> class to return last names with a " (s)" suffix:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Student</span> <span class="directive">extends</span> Person {
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="type">int</span> semester;
+
+    <span class="directive">public</span> Student(<span class="predefined-type">String</span> firstName, <span class="predefined-type">String</span> lastName, City city, <span class="type">int</span> semester) {
+        <span class="local-variable">super</span>(firstName, lastName, city);
+        <span class="local-variable">this</span>.semester = semester;
+    }
+
+    <span class="directive">public</span> <span class="type">int</span> getSemester() {
+        <span class="keyword">return</span> semester;
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="predefined-type">String</span> getLastName() {
+        <span class="keyword">return</span> <span class="local-variable">super</span>.getLastName() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> (s)</span><span class="delimiter">&quot;</span></span>;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>@Override</code> marker is called an <em>annotation</em>.
+It marks the intention of overriding a method in the base-class.
+If the <code>Person</code> class was changed to no longer offer a <code>getLastName()</code> method, this annotation would allow the compiler to detect this inconsistency.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_the_object_root_class">4.3.1. The Object root class</h4>
+<div class="paragraph">
+<p>Let&#8217;s look at a simple class which does not explicitly extend another class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">final</span> <span class="type">class</span> <span class="class">Dog</span> {
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> name;
+
+    <span class="directive">public</span> Dog(<span class="predefined-type">String</span> name) {
+        <span class="local-variable">this</span>.name = name;
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">String</span> getName() {
+        <span class="keyword">return</span> name;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In Java, all classes implicitly extend the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html"><code>Object</code></a> class.
+In other words, even though <code>Dog</code> does not declare an inheritance relationship via <code>extends</code>, it still automatically <code>extends Object</code>.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Class <code>Object</code> is the root of the class hierarchy.
+Every class has <code>Object</code> as a superclass.
+All objects, including arrays, implement the methods of this class.</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Java API documentation
+</div>
+</div>
+<div class="paragraph">
+<p>Thus, all of your classes automatically inherit 11 methods declared by the <code>Object</code> class.
+Most of these methods are irrelevant in basic Java programs, but the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#toString--"><code>toString()</code></a> method is important, so let&#8217;s look at it in further detail.</p>
+</div>
+<div class="paragraph">
+<p>The <code>toString()</code> method returns a textual representation of an object.
+You can call <code>toString()</code> like any other method, but most notably, it is automatically invoked whenever you pass an object to <code>System.out.println()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Dog dog = <span class="keyword">new</span> Dog(<span class="string"><span class="delimiter">&quot;</span><span class="content">Milo</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">System</span>.out.println(dog); <span class="comment">// prints 'ch.fhnw.ima.oop.Dog@511d50c0'</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As illustrated in the above example, the base implementation returns weird looking gibberish (it is a mixture between the name of the class and its hash code, but that&#8217;s not important for the time being).
+Since <code>toString()</code> is a normal method, you are free to override it and provide a better textual representation of your object:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">final</span> <span class="type">class</span> <span class="class">Dog</span> {
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> name;
+
+    <span class="directive">public</span> Dog(<span class="predefined-type">String</span> name) {
+        <span class="local-variable">this</span>.name = name;
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">String</span> getName() {
+        <span class="keyword">return</span> name;
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="predefined-type">String</span> toString() {
+        <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Dog (Name: </span><span class="delimiter">&quot;</span></span> + name + <span class="string"><span class="delimiter">&quot;</span><span class="content">)</span><span class="delimiter">&quot;</span></span>;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The generated output now looks much friendlier:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Dog dog = <span class="keyword">new</span> Dog(<span class="string"><span class="delimiter">&quot;</span><span class="content">Milo</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">System</span>.out.println(dog); <span class="comment">// prints 'Dog (Name: Milo)'</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_enum_types">4.4. Enum Types</h3>
+<div class="paragraph">
+<p>Now that you know how to define your own classes via composition and/or inheritance, let&#8217;s have a look at a special kind of data modeling problem for which Java provides a simple solution.</p>
+</div>
+<div class="paragraph">
+<p>Imagine a game like <a href="https://en.wikipedia.org/wiki/Pac-Man">Pac-Man</a>, where a character is moving either up, right, down, or left.
+Somewhere in your game, you are tracking the character&#8217;s direction.
+What class or data-type would you choose for that purpose?</p>
+</div>
+<div class="paragraph">
+<p>You might be tempted to use an <code>int</code> type and declare 4 named constants:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// BAD SOLUTION</span>
+
+<span class="directive">public</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> UP = <span class="integer">0</span>;
+<span class="directive">public</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> RIGHT = <span class="integer">1</span>;
+<span class="directive">public</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> DOWN = <span class="integer">2</span>;
+<span class="directive">public</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> LEFT = <span class="integer">3</span>;
+
+<span class="directive">private</span> <span class="type">int</span> direction;
+
+<span class="directive">public</span> <span class="type">void</span> setDirection(<span class="type">int</span> direction) {
+    <span class="local-variable">this</span>.direction = direction;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is quite readable, but very error prone: The type system can&#8217;t prevent usage of a "wrong" value.
+Consequently, a program that compiles just fine would break at runtime:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">setDirection(UP); <span class="comment">// ok</span>
+setDirection(<span class="integer">42</span>); <span class="comment">// oops</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>What we would need is a type that just allows the four values <code>UP</code>, <code>RIGHT</code>, <code>DOWN</code>, <code>LEFT</code> and nothing else.
+Java provides a special-purpose type to represent such fixed enumerations, the <code>enum</code> type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// GOOD SOLUTION</span>
+
+<span class="directive">public</span> <span class="type">enum</span> Direction { <i class="conum" data-value="1"></i><b>(1)</b>
+
+    UP, RIGHT, DOWN, LEFT <i class="conum" data-value="2"></i><b>(2)</b>
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The enum keyword makes <code>Direction</code> extend the <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html">Enum</a> base class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>All values are constants and are thus, by convention, in uppercase letters</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Usage of an enum is straight-forward:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> Direction direction;
+
+<span class="directive">public</span> <span class="type">void</span> setDirection(Direction direction) {
+    <span class="local-variable">this</span>.direction = direction;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note how enums improve code readability: Just by looking at the type of the <code>direction</code> variable we already know something about its meaning (which was not the case with <code>int</code> constants).
+Java is a typed language.
+By using proper types to model our data we are taking advantage of the compiler.
+Errors can be caught at compile time and don&#8217;t cause bugs at runtime.
+By using the <code>Direction</code> enum, it is impossible to create a compiling program that contains a "wrong" direction value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">setDirection(Direction.UP);
+setDirection(Direction.DOWN);
+<span class="comment">// setDirection(42); IMPOSSIBLE (does not compile)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each <code>enum</code> type automatically offers a variety of methods.
+Most importantly, the <code>values()</code> method returns all possible constants, and the <code>name()</code> method returns a constant&#8217;s name:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">for</span> (Direction direction : Direction.values()) {
+    <span class="predefined-type">System</span>.out.println(direction.name());
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+If you&#8217;re getting bored or overwhelmed by all this reading, you might want to write some code for a change.
+At this point you know just enough about object-oriented programming to get started with the first exercise.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interfaces">4.5. Interfaces</h3>
+<div class="paragraph">
+<p>Suppose you were writing a fun little game in which unicorns played a major role.
+You picked up the new concepts explained in the previous sections and came up with this nice and simple class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Unicorn</span> <span class="directive">extends</span> Horse {
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> name;
+
+    <span class="directive">public</span> Unicorn(<span class="predefined-type">String</span> name) {
+        <span class="local-variable">this</span>.name = name;
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">String</span> getName() {
+        <span class="keyword">return</span> name;
+    }
+
+    <span class="directive">public</span> <span class="type">void</span> glowInRainbowColors() {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Glitter</span><span class="delimiter">&quot;</span></span>);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, someone else already wrote a <code>Horse</code> class – you were able to inherit most of its functionality, keeping your new <code>Unicorn</code> class nice an simple.
+Since you were done so quickly, you put all your energy and focus into listing your lovingly named unicorns in a fancy way:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>~ •*¨*• ~ ~ •*¨*• ~
+★★★ Mystery ★★★
+★★★ Rainbow ★★★
+★★★ Jessica ★★★
+~ •*¨*• ~ ~ •*¨*• ~</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is the code that you wrote to generate the output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+    <span class="predefined-type">List</span>&lt;Unicorn&gt; unicorns = <span class="predefined-type">Arrays</span>.asList(
+            <span class="keyword">new</span> Unicorn(<span class="string"><span class="delimiter">&quot;</span><span class="content">Mystery</span><span class="delimiter">&quot;</span></span>),
+            <span class="keyword">new</span> Unicorn(<span class="string"><span class="delimiter">&quot;</span><span class="content">Rainbow</span><span class="delimiter">&quot;</span></span>),
+            <span class="keyword">new</span> Unicorn(<span class="string"><span class="delimiter">&quot;</span><span class="content">Jessica</span><span class="delimiter">&quot;</span></span>));
+    <span class="predefined-type">System</span>.out.println(fancyUnicornNames(unicorns));
+}
+
+<span class="directive">private</span> <span class="directive">static</span> <span class="predefined-type">String</span> fancyUnicornNames(<span class="predefined-type">List</span>&lt;Unicorn&gt; unicorns) {
+    <span class="predefined-type">StringBuilder</span> fancyNames = <span class="keyword">new</span> <span class="predefined-type">StringBuilder</span>();
+    fancyNames.append(<span class="string"><span class="delimiter">&quot;</span><span class="content">~ •*¨*• ~ ~ •*¨*• ~</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">for</span> (Unicorn unicorn : unicorns) {
+        fancyNames.append(<span class="string"><span class="delimiter">&quot;</span><span class="content">★★★ </span><span class="delimiter">&quot;</span></span>).append(unicorn.getName()).append(<span class="string"><span class="delimiter">&quot;</span><span class="content"> ★★★</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>);
+    }
+    fancyNames.append(<span class="string"><span class="delimiter">&quot;</span><span class="content">~ •*¨*• ~ ~ •*¨*• ~</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">return</span> <span class="predefined-type">String</span>.valueOf(fancyNames);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unfortunately, life is not all rainbows and unicorns.
+Soon you were forced to extend your game and introduce dragons.
+Dragons are not related to horses nor unicorns, thus you couldn&#8217;t extend any existing class.
+For a second you were tempted to introduce a common base-class (e.g. <code>LivingCreature</code>) in which you could nicely handle the <code>name</code> field and the <code>getName()</code> accessor in order not to duplicate this code.
+However, <code>Unicorn</code> already extends <code>Horse</code>, and multiple inheritance is not supported in Java.
+You decided to bite the bullet and write a <code>Dragon</code> class from scratch:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Dragon</span> {
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> name;
+
+    <span class="directive">public</span> Dragon(<span class="predefined-type">String</span> name) {
+        <span class="local-variable">this</span>.name = name;
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">String</span> getName() {
+        <span class="keyword">return</span> name;
+    }
+
+    <span class="directive">public</span> <span class="type">void</span> fly() {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Flying higher and higher</span><span class="delimiter">&quot;</span></span>);
+    }
+
+    <span class="directive">public</span> <span class="type">void</span> spitFire() {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Sparks &amp; Flames!</span><span class="delimiter">&quot;</span></span>);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But wouldn&#8217;t it be nice if the list of dragon instances could be output in the same fancy style as the unicorns?
+Some quick copy/pasting, a bit of renaming – tada!</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+    <span class="predefined-type">List</span>&lt;Dragon&gt; dragons = <span class="predefined-type">Arrays</span>.asList(
+            <span class="keyword">new</span> Dragon(<span class="string"><span class="delimiter">&quot;</span><span class="content">Toothless</span><span class="delimiter">&quot;</span></span>),
+            <span class="keyword">new</span> Dragon(<span class="string"><span class="delimiter">&quot;</span><span class="content">Stormfly</span><span class="delimiter">&quot;</span></span>),
+            <span class="keyword">new</span> Dragon(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hookfang</span><span class="delimiter">&quot;</span></span>)
+    );
+    <span class="predefined-type">System</span>.out.println(fancyDragonNames(dragons));
+}
+
+<span class="directive">private</span> <span class="directive">static</span> <span class="predefined-type">String</span> fancyDragonNames(<span class="predefined-type">List</span>&lt;Dragon&gt; dragons) {
+    <span class="predefined-type">StringBuilder</span> fancyNames = <span class="keyword">new</span> <span class="predefined-type">StringBuilder</span>();
+    fancyNames.append(<span class="string"><span class="delimiter">&quot;</span><span class="content">~ •*¨*• ~ ~ •*¨*• ~</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">for</span> (Dragon dragon : dragons) {
+        fancyNames.append(<span class="string"><span class="delimiter">&quot;</span><span class="content">★★★ </span><span class="delimiter">&quot;</span></span>).append(dragon.getName()).append(<span class="string"><span class="delimiter">&quot;</span><span class="content"> ★★★</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>);
+    }
+    fancyNames.append(<span class="string"><span class="delimiter">&quot;</span><span class="content">~ •*¨*• ~ ~ •*¨*• ~</span><span class="delimiter">&quot;</span></span>);
+    <span class="keyword">return</span> <span class="predefined-type">String</span>.valueOf(fancyNames);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Hopefully you noticed how <code>fancyUnicornNames</code> and <code>fancyDragonNames</code> are almost identical.
+While copy/pasting might still work for two methods, it obviously doesn&#8217;t scale – soon enough you will end up with <code>fancyKnightNames</code>, <code>fancyFairyNames</code>, and <code>fancyMonsterNames</code>.
+The tiniest bug requires the same fix in 10 different places.</p>
+</div>
+<div class="paragraph">
+<p>Taking a step back, things are actually really simple: Inside the <code>fancyNames</code> rendering code, you don&#8217;t really care whether you output a unicorn&#8217;s name, a dragon&#8217;s name, or a monster&#8217;s name.
+In other words, you don&#8217;t really care whether your <code>fancyNames</code> method gets a <code>List&lt;Unicorn&gt;</code>, a <code>List&lt;Dragon&gt;</code>, or even a <code>List&lt;Monster&gt;</code>.
+All you care about, is that whatever is in the list has a <code>getName()</code> method.</p>
+</div>
+<div class="sect3">
+<h4 id="_using_an_interface_to_create_reusable_code">4.5.1. Using an Interface to Create Reusable Code</h4>
+<div class="paragraph">
+<p>Interfaces solve exactly this problem: They let you express a contract in order to write reusable code relying on that contract.
+In our case, the contract solely requires a <code>getName()</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">Named</span> { <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span class="predefined-type">String</span> getName(); <i class="conum" data-value="2"></i><b>(2)</b>
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>interface</code> keyword is used to define an interface</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A method signature (note the absence of a body, i.e. the method does not have a default implementation)</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now that the <code>Named</code> interface exists, we change the <code>Unicorn</code> and <code>Dragon</code> classes to implement it.
+Implementing an interface is like making an official promise to fulfill a contract.
+The compiler makes sure that this promise is actually kept.
+This is how the <code>Unicorn</code> class must be changed (same for <code>Dragon</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Unicorn</span> <span class="directive">extends</span> Horse <span class="directive">implements</span> Named { <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> name;
+
+    <span class="directive">public</span> Unicorn(<span class="predefined-type">String</span> name) {
+        <span class="local-variable">this</span>.name = name;
+    }
+
+    <span class="annotation">@Override</span>  <i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="directive">public</span> <span class="predefined-type">String</span> getName() {
+        <span class="keyword">return</span> name;
+    }
+
+    <span class="directive">public</span> <span class="type">void</span> glowInRainbowColors() {
+        <span class="predefined-type">System</span>.out.println(<span class="string"><span class="delimiter">&quot;</span><span class="content">Glitter</span><span class="delimiter">&quot;</span></span>);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+While extending multiple classes is not supported in Java, it would be perfectly legal to implement multiple interfaces.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now the <code>fancyNames</code> method can be rewritten based on the new <code>Named</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">FancyNames</span> {
+
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+        <span class="predefined-type">List</span>&lt;Unicorn&gt; unicorns = <span class="predefined-type">Arrays</span>.asList(
+                <span class="keyword">new</span> Unicorn(<span class="string"><span class="delimiter">&quot;</span><span class="content">Mystery</span><span class="delimiter">&quot;</span></span>),
+                <span class="keyword">new</span> Unicorn(<span class="string"><span class="delimiter">&quot;</span><span class="content">Rainbow</span><span class="delimiter">&quot;</span></span>),
+                <span class="keyword">new</span> Unicorn(<span class="string"><span class="delimiter">&quot;</span><span class="content">Jessica</span><span class="delimiter">&quot;</span></span>));
+
+        <span class="predefined-type">System</span>.out.println(fancyNames(unicorns));
+
+        <span class="predefined-type">List</span>&lt;Dragon&gt; dragons = <span class="predefined-type">Arrays</span>.asList(
+                <span class="keyword">new</span> Dragon(<span class="string"><span class="delimiter">&quot;</span><span class="content">Toothless</span><span class="delimiter">&quot;</span></span>),
+                <span class="keyword">new</span> Dragon(<span class="string"><span class="delimiter">&quot;</span><span class="content">Stormfly</span><span class="delimiter">&quot;</span></span>),
+                <span class="keyword">new</span> Dragon(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hookfang</span><span class="delimiter">&quot;</span></span>)
+        );
+
+        <span class="predefined-type">System</span>.out.println(fancyNames(dragons));
+    }
+
+    <span class="directive">private</span> <span class="directive">static</span> &lt;T <span class="directive">extends</span> Named&gt; <span class="predefined-type">String</span> fancyNames(<span class="predefined-type">List</span>&lt;T&gt; namedItems) { <i class="conum" data-value="1"></i><b>(1)</b>
+        <span class="predefined-type">StringBuilder</span> fancyNames = <span class="keyword">new</span> <span class="predefined-type">StringBuilder</span>();
+        fancyNames.append(<span class="string"><span class="delimiter">&quot;</span><span class="content">~ •*¨*• ~ ~ •*¨*• ~</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>);
+        <span class="keyword">for</span> (Named named : namedItems) { <i class="conum" data-value="2"></i><b>(2)</b>
+            fancyNames.append(<span class="string"><span class="delimiter">&quot;</span><span class="content">★★★ </span><span class="delimiter">&quot;</span></span>).append(named.getName()).append(<span class="string"><span class="delimiter">&quot;</span><span class="content"> ★★★</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="3"></i><b>(3)</b>
+        }
+        fancyNames.append(<span class="string"><span class="delimiter">&quot;</span><span class="content">~ •*¨*• ~ ~ •*¨*• ~</span><span class="delimiter">&quot;</span></span>);
+        <span class="keyword">return</span> <span class="predefined-type">String</span>.valueOf(fancyNames);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Accepts a list with items that implement the <code>Named</code> interface <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnote_1" title="View footnote.">1</a>]</sup></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Iteration logic relies on the fact that all list items implement the <code>Named</code> interface</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Actual usage of <code>getName()</code>, as declared by the <code>Named</code> interface</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To summarize: Introducing the <code>Named</code> interface helped implementing the <code>fancyNames</code> method in a way that is reusable for unicorns, dragons and all future implementations of the <code>Named</code> interface.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_using_an_interface_to_achieve_encapsulation">4.5.2. Using an Interface to Achieve Encapsulation</h4>
+<div class="paragraph">
+<p>Remember the <code>List</code>, <code>Set</code>, and <code>Map</code> interfaces from the introductory section on <a href="#data-structures">Data Structures</a>?
+All of them are perfect illustrations of another important aspect of interfaces: Interfaces allow to hide implementation details.
+In simple words, they separate <strong>what</strong> can be done (e.g. the <code>List</code> interface) from <strong>how</strong> it is done (e.g. the <code>ArrayList</code> implementation).
+This separation makes programs easier to understand and maintain.
+The complexity of the <strong>how</strong> is hidden behind the interface, making it e.g. possible to program against the <code>List</code> interface without ever having to deal with the array-related complexity encapsulated in the <code>ArrayList</code> class.
+In the <a href="#data-structures">Data Structures</a> section you were encouraged to always code to the <code>List</code> interface rather than the <code>ArrayList</code> implementation.
+By now it should be clear that this has at least two benefits:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Oracle is completely free to re-implement, optimize, or otherwise change the <code>ArrayList</code> class – as long as it still properly implements the <code>List</code> interface, no changes will be required in your code.</p>
+</li>
+<li>
+<p>On the other hand, <strong>you</strong> are also completely free to switch to another <code>List</code> implementation – if you want to use a <code>LinkedList</code> rather than an <code>ArrayList</code>, you only need to swap out the implementation in one spot.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_working_with_interfaces_in_java_8">4.5.3. Working with Interfaces in Java 8</h4>
+<div class="paragraph">
+<p>Everything you learned about interfaces so far is deeply baked into the Java language and works with versions as old as Java 5.
+With the latest version, Java 8, some very attractive language changes were made.
+At least two of them make working with interfaces even more pleasurable:</p>
+</div>
+<div class="sect4">
+<h5 id="_default_methods">Default Methods</h5>
+<div class="paragraph">
+<p>Traditionally, interfaces do not contain method bodies, but only declare method signatures:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">Named</span> { <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span class="predefined-type">String</span> getName(); <i class="conum" data-value="2"></i><b>(2)</b>
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>interface</code> definition</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A method signature without body</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>With Java 8 it is possible to provide default implementations for interface methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">Named</span> {
+
+    <span class="keyword">default</span> <span class="predefined-type">String</span> getName() {
+        <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Unknown</span><span class="delimiter">&quot;</span></span>;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A class implementing this interface then becomes very minimal:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Creature</span> <span class="directive">implements</span> Named {
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It fulfills the interface contract because it automatically inherits the default implementation, i.e. it is possible to call <code>getName</code> on a <code>Creature</code> instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Creature creature = <span class="keyword">new</span> Creature();
+<span class="predefined-type">System</span>.out.println(creature.getName()); <span class="comment">//  prints &quot;Unknown&quot;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Of course <code>Creature</code> could still override <code>getName</code> as if no default implementation existed.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_lambda_expressions">Lambda Expressions</h5>
+<div class="paragraph">
+<p>Let&#8217;s revisit the <code>Named</code> interface without the default method implementation again:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">Named</span> { <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span class="predefined-type">String</span> getName(); <i class="conum" data-value="2"></i><b>(2)</b>
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>interface</code> definition</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A method signature without body</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Methods without a body are called <strong>abstract</strong> methods, and interfaces with a single abstract method are called <strong>SAM types</strong> (Single Abstract Method types).</p>
+</div>
+<div class="paragraph">
+<p><strong>Lambda expressions</strong>, a new feature in Java 8, represent a convenience construct to make working with SAM types simpler:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Named myNamed = () -&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">Lara Croft</span><span class="delimiter">&quot;</span></span>;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the <code>Named myNamed</code> part is a standard variable type/name declaration, only the part to the right of the <code>=</code> sign is the lambda expression.
+Let&#8217;s look at another example to get a better feel for SAM types and lambdas:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">Calculation</span> {
+
+    <span class="type">double</span> calc(<span class="type">double</span> a, <span class="type">double</span> b);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>Calculation</code> again has a single, abstract method.
+Consequently, a lambda expression can be used to provide an implementation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Calculation addition = (a, b) -&gt; a + b;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A lambda expression has everything that a method has: an argument list, which is the <code>(a, b)</code> part, and a body, which is the <code>a + b</code> part after the arrow symbol.
+Just like methods, lambda expressions allow to encapsulate not just simple one-liners, but also more complex constructs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Calculation fancy = (x, y) -&gt; {
+    <span class="type">double</span> fx = <span class="predefined-type">Math</span>.sin(x);
+    <span class="type">double</span> fy = <span class="predefined-type">Math</span>.cos(y);
+    <span class="keyword">return</span> fx + fy;
+};</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Curly braces and a <code>return</code> statement are need for lambda expressions that encompass more than one statement.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Up to now we have only looked at how lambda expressions can be defined.
+We will now look at how they are used.</p>
+</div>
+<div class="paragraph">
+<p>Actually, you have already met lambda expressions in an earlier section, namely when working with the <a href="#section-stream-api">The Java 8 Stream API</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Stream&lt;<span class="predefined-type">String</span>&gt; words = Stream.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">hello</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">new</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">world</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">of</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">streams</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; lengths = words.map(word -&gt; word.length()).collect(Collectors.toList());
+<span class="predefined-type">System</span>.out.println(lengths); <span class="comment">// prints [5, 3, 5, 2, 7]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>map</code> method takes the <code>java.util.function.Function</code> SAM type as its argument, for which we provide an ad-hoc implementation in the form of the <code>word &#8594; word.length()</code> lambda expression.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Lambda expressions allow to pass code fragments around like data, typically as arguments to other methods.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resources_4">4.6. Resources</h3>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Java4Kids: Chapter 3
+</td>
+<td class="hdlist2">
+<p><a href="https://yfain.github.io/Java4Kids/#_meet_classes_the_main_language_constructs" class="bare">https://yfain.github.io/Java4Kids/#_meet_classes_the_main_language_constructs</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Java4Kids: Chapter 5
+</td>
+<td class="hdlist2">
+<p><a href="https://yfain.github.io/Java4Kids/#_interfaces_lambdas_abstract_and_anonymous_classes" class="bare">https://yfain.github.io/Java4Kids/#_interfaces_lambdas_abstract_and_anonymous_classes</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Angelika Langer: Lambda Tutorial
+</td>
+<td class="hdlist2">
+<p><a href="http://www.angelikalanger.com/Lambdas/Lambdas.pdf" class="bare">http://www.angelikalanger.com/Lambdas/Lambdas.pdf</a></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnote_1">
+<a href="#_footnoteref_1">1</a>. Note that simply accepting a <code>List&lt;Named&gt;</code> would not work. We are getting into complicated type parameterization territory here, but the quick explanation goes like this: The <code>Named</code> interface creates a relationship between the <code>Unicorn</code> and the <code>Dragon</code> class. It would seem natural that this also implies a relationship between a <code>List&lt;Unicorn&gt;</code> and a <code>List&lt;Dragon&gt;</code>. Unfortunately, these two types are not related from the Java compiler&#8217;s point of view. Therefore, the item type <code>T</code> must explicitly be declared as <code>T extends Named</code>. Alternatively, an upper bounded wildcard could be used (<code>List&lt;? extends Named&gt;</code>). Further details are e.g. explained in the official <a href="https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html">Wildcards and Subtyping</a> tutorial.
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.1<br>
-Last updated 2016-03-02 09:50:02 +01:00
+Version 1.2.0<br>
+Last updated 2016-03-07 10:39:20 +01:00
 </div>
 </div>
 </body>
