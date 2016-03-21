@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>Programming II</h1>
 <div class="details">
 <span id="author" class="author">Dominique Brodbeck &amp; Rahel Lüthy · Fachhochschule Nordwestschweiz · 2016</span><br>
-<span id="revnumber">version 1.3.0</span>
+<span id="revnumber">version 1.4.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -561,6 +561,16 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_enum_types">4.4. Enum Types</a></li>
 <li><a href="#_interfaces">4.5. Interfaces</a></li>
 <li><a href="#_resources_4">4.6. Resources</a></li>
+</ul>
+</li>
+<li><a href="#fp">5. Functional Programming</a>
+<ul class="sectlevel2">
+<li><a href="#_mathematical_functions">5.1. Mathematical Functions</a></li>
+<li><a href="#_programs_as_data_pipelines">5.2. Programs as Data Pipelines</a></li>
+<li><a href="#_preventing_programming_errors">5.3. Preventing Programming Errors</a></li>
+<li><a href="#_map_filter_reduce">5.4. Map / Filter / Reduce</a></li>
+<li><a href="#_summary">5.5. Summary</a></li>
+<li><a href="#_resources_5">5.6. Resources</a></li>
 </ul>
 </li>
 </ul>
@@ -2609,7 +2619,7 @@ Just like methods, lambda expressions allow to encapsulate not just simple one-l
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Curly braces and a <code>return</code> statement are need for lambda expressions that encompass more than one statement.
+Curly braces and a <code>return</code> statement are needed for lambda expressions that encompass more than one statement.
 </td>
 </tr>
 </table>
@@ -2679,6 +2689,570 @@ Angelika Langer: Lambda Tutorial
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="fp">5. Functional Programming</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For most humans, new concepts are easier to understand if they can be related to things they already know.
+One of the appeals of object-oriented programming (OOP) is that objects have obvious analogies in real life.
+Persons, dogs, and cities are very familiar concepts, and it&#8217;s easy to grasp how a <code>Person</code> class models certain aspects of a real-life person.</p>
+</div>
+<div class="paragraph">
+<p>Unfortunately, concepts like assignments or method calls often have no analogy in real life.
+Functional programming (FP) is a programming style that addresses this problem:
+Just like OOP focuses on the concept of objects, functional programming (FP) focuses on the concept of mathematical functions to describe computer programs.
+Because most of us know math better than we know programming, FP concepts are often easy to understand because they are so similar to math.</p>
+</div>
+<div class="paragraph">
+<p>Note that OOP and FP are not exclusive: Certain aspects of a program are best expressed with objects, while others are easier to program using functions.
+Java 8 is a perfect language to combine the best of two worlds!
+Let&#8217;s see what FP brings to the table&#8230;&#8203;</p>
+</div>
+<div class="sect2">
+<h3 id="_mathematical_functions">5.1. Mathematical Functions</h3>
+<div class="paragraph">
+<p>If you look at this simple Java assignment through the eyes of a mathematician, it is utter nonsense:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">x = x + <span class="integer">1</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similarly, the following Java method doesn&#8217;t have anything to do with math:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">int</span> add(<span class="type">int</span> a) {
+  <span class="type">int</span> c = a + <span class="local-variable">this</span>.b;
+  <span class="local-variable">this</span>.b = c;
+  <span class="keyword">return</span> c;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To put them in contrast, let&#8217;s look at two typical math functions and explore their common characteristics:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>f(x) = sin(x)</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>f(a,b) = a + b</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These functions</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>have a set of input (<code>x</code>, <code>a</code> and <code>b</code>)</p>
+</li>
+<li>
+<p>each have one output</p>
+</li>
+<li>
+<p>given the same input, always produce the same output</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>All three points sound really obvious in the context of mathematical functions.
+Yet, our Java methods often diverge from these rules in many ways.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at our initial example again:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">int</span> add(<span class="type">int</span> a) {
+  <span class="type">int</span> c = a + <span class="local-variable">this</span>.b;
+  <span class="local-variable">this</span>.b = c;
+  <span class="keyword">return</span> c;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ideally, a Java method declares its input and output as part of its signature.
+Looking at</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">int</span> add(<span class="type">int</span> a)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>could give the impression that our example method has one input <code>a</code> and one output (the return value).
+But this is not the case!
+In fact, this method</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>pretends to have one input (<code>a</code>) but actually has two (<code>a</code> and <code>this.b</code>)</p>
+</li>
+<li>
+<p>pretends to have one output (the return value) but actually has two (assigning <code>this.b = c</code>)</p>
+</li>
+<li>
+<p>given the same input <code>a</code>, may produce a different result (depending on the value of <code>this.b</code>)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Obviously, it is not similar to a math function at all, which makes it really hard to understand.</p>
+</div>
+<div class="paragraph">
+<p>The method has <strong>side effects</strong>: It reads values which are not declared as input parameters and writes values in addition to returning a result.
+Its these side effects that make the method hard to understand and cause it to deviate from the math function characteristics.</p>
+</div>
+<div class="paragraph">
+<p>The following <code>add</code> method is much easier to read because it has no side effects and is thus similar to a math function:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">static</span> <span class="type">int</span> add(<span class="type">int</span> a, <span class="type">int</span> b) {
+  <span class="keyword">return</span> a + b;
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>static</code> keyword makes it explicit that the function does not read nor write any fields
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To summarize: In functional programming, methods explicitly declare their input parameters, return one result, and do not rely on side effects.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_programs_as_data_pipelines">5.2. Programs as Data Pipelines</h3>
+<div class="paragraph">
+<p>Let&#8217;s look at another example method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">int</span> countFourLetterWords(<span class="predefined-type">File</span> file) {
+    <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; words = readWordsFromFile(file);
+    <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; fourLetterWords = filterByLength(words, <span class="integer">4</span>);
+    <span class="type">int</span> count = count(fourLetterWords);
+    <span class="keyword">return</span> count;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You probably have a pretty good understanding of what&#8217;s going on here, right?
+Even though the methods <code>readWordsFromFile</code>, <code>filterByLength</code>, and <code>count</code> are not shown in detail, it is still quite obvious what they are doing.
+This is due to the fact that all of them have good names, very explicit input parameters, return one result, and don&#8217;t rely on side effects.</p>
+</div>
+<div class="paragraph">
+<p>Functional programming uses functions as the fundamental building blocks of a program.
+Just like in mathematics, where simple functions can be combined to express more complex calculations, Java methods can be combined to form a pipeline.
+Data flows through the method calls until the final result is returned.</p>
+</div>
+<div class="paragraph">
+<p>Functional programming obviously makes code very readable.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_preventing_programming_errors">5.3. Preventing Programming Errors</h3>
+<div class="paragraph">
+<p>Let&#8217;s go back to our initial <code>add</code> example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">int</span> add(<span class="type">int</span> a) {
+  <span class="type">int</span> c = a + <span class="local-variable">this</span>.b;
+  <span class="local-variable">this</span>.b = c;
+  <span class="keyword">return</span> c;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example may seem a little far fetched and contrived – seriously, who writes cryptic code like this?!</p>
+</div>
+<div class="paragraph">
+<p>Actually, side effects occur very often in object-oriented programming!
+Accessor and mutator methods like <code>getName()</code> and <code>setName(String name)</code> <strong>only</strong> work because of side effects.
+Fortunately, setters and getters are so easy to implement that there&#8217;s no need to get rid of their side effects completely (though some FP purists disagree on this).</p>
+</div>
+<div class="paragraph">
+<p>In general, side effects in non-trivial methods make implementations hard to read but also hard to write correctly.
+The following example will illustrate how removing side effects can prevent programming errors.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s dive in with a <code>Container</code> class, which models a vessel with contents and a maximal capacity:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Container</span> {
+
+    <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> CAPACITY = <span class="integer">100</span>;
+
+    <span class="directive">private</span> <span class="type">int</span> contents;
+
+    <span class="directive">public</span> <span class="predefined-type">Container</span>(<span class="type">int</span> contents) {
+        <span class="local-variable">this</span>.contents = contents;
+    }
+
+    <span class="directive">public</span> <span class="type">int</span> getContents() {
+        <span class="keyword">return</span> contents;
+    }
+
+    <span class="directive">public</span> <span class="type">void</span> add(<span class="type">int</span> amount) {
+        <span class="keyword">if</span> (contents + amount &gt; CAPACITY) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">IllegalArgumentException</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Exceeding capacity</span><span class="delimiter">&quot;</span></span>);
+        }
+        contents += amount;
+    }
+
+    <span class="directive">public</span> <span class="type">void</span> remove(<span class="type">int</span> amount) {
+        <span class="keyword">if</span> (contents &lt; amount) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">IllegalArgumentException</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Insufficient contents</span><span class="delimiter">&quot;</span></span>);
+        }
+        contents -= amount;
+    }
+
+    <span class="directive">public</span> <span class="type">void</span> transferTo(<span class="type">int</span> amount, <span class="predefined-type">Container</span> toContainer) {
+        remove(amount);
+        toContainer.add(amount);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note how <code>add</code> and <code>remove</code> both alter the container&#8217;s contents as a side effect.
+Moreover, both may throw an exception, another form of side effect.
+Specifically, <code>add</code> checks that the container cannot exceed its capacity, while <code>remove</code> assures that the requested amount is limited by the current contents.</p>
+</div>
+<div class="paragraph">
+<p>The method <code>transferTo</code> uses <code>add</code> and <code>remove</code> to transfer a specific <code>amount</code> from this container to another container.</p>
+</div>
+<div class="paragraph">
+<p>This is how the <code>Container</code> class can be used:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Container</span> a = <span class="keyword">new</span> <span class="predefined-type">Container</span>(<span class="integer">80</span>);
+<span class="predefined-type">Container</span> b = <span class="keyword">new</span> <span class="predefined-type">Container</span>(<span class="integer">80</span>);
+<span class="comment">// transfer 20 from container a to container b</span>
+a.transferTo(<span class="integer">20</span>, b);
+<span class="predefined-type">System</span>.out.println(a.getContents());    <span class="comment">// prints 60</span>
+<span class="predefined-type">System</span>.out.println(b.getContents());    <span class="comment">// prints 100</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Interesting things happen when an impossible transfer is requested:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Container</span> c = <span class="keyword">new</span> <span class="predefined-type">Container</span>(<span class="integer">80</span>);
+<span class="predefined-type">Container</span> d = <span class="keyword">new</span> <span class="predefined-type">Container</span>(<span class="integer">80</span>);
+<span class="keyword">try</span> {
+    <span class="comment">// the following call will fail</span>
+    c.transferTo(<span class="integer">70</span>, d); <i class="conum" data-value="1"></i><b>(1)</b>
+} <span class="keyword">catch</span> (<span class="exception">IllegalArgumentException</span> e) {
+    <span class="predefined-type">System</span>.out.println(e.getMessage()); <span class="comment">// prints &quot;Exceeding capacity&quot; </span><i class="conum" data-value="2"></i><b>(2)</b>
+}
+<span class="predefined-type">System</span>.out.println(c.getContents());    <span class="comment">// prints 10 </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="predefined-type">System</span>.out.println(d.getContents());    <span class="comment">// prints 80</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>An impossible transfer which exceeds capacity of target container <code>d</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>As expected, an exception is thrown by the nested call to <code>add</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><strong>Programming Error</strong>: Even though the transfer failed, the amount is still deduced from container <code>c</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Of course we could invest time in fixing the <code>transferTo</code> implementation and making sure not to alter container states in case of errors.
+But it is a matter of fact that the various side effects make this implementation non-trivial.
+Instead of wasting time and energy, let&#8217;s instead look at how the same problem could be solved in a much more robust way – functional programming to the rescue!</p>
+</div>
+<div class="paragraph">
+<p>For starters, we will change the <code>add</code> and <code>remove</code> methods to no longer alter the contents by side effect, but instead return a new <code>Container</code> instance with the changed contents:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Container</span> {
+
+    <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> CAPACITY = <span class="integer">100</span>;
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="type">int</span> contents;
+
+    <span class="directive">public</span> <span class="predefined-type">Container</span>(<span class="type">int</span> contents) {
+        <span class="local-variable">this</span>.contents = contents;
+    }
+
+    <span class="directive">public</span> <span class="type">int</span> getContents() {
+        <span class="keyword">return</span> contents;
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">Container</span> add(<span class="type">int</span> amount) {
+        <span class="keyword">if</span> (contents + amount &gt; CAPACITY) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">IllegalArgumentException</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Exceeding capacity</span><span class="delimiter">&quot;</span></span>);
+        }
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">Container</span>(contents + amount);
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">Container</span> remove(<span class="type">int</span> amount) {
+        <span class="keyword">if</span> (contents &lt; amount) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">IllegalArgumentException</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Insufficient contents</span><span class="delimiter">&quot;</span></span>);
+        }
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">Container</span>(contents - amount);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As a next step, we want to improve the transfer scenario.
+Specifically, we want to make its input and output much more explicit:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A transfer needs two containers, a <strong>from</strong> container and a <strong>to</strong> container</p>
+</li>
+<li>
+<p>A successful transfer also returns two containers, the <strong>from</strong> container now has less contents, while the <strong>to</strong> container now has more contents</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In other words, we need a pair of containers as input, and also return a pair of containers.
+Let&#8217;s introduce a <code>Transfer</code> class which models a pair of containers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Transfer</span> {
+
+    <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">Container</span> from;
+    <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">Container</span> to;
+
+    <span class="directive">public</span> Transfer(<span class="predefined-type">Container</span> from, <span class="predefined-type">Container</span> to) {
+        <span class="local-variable">this</span>.from = from;
+        <span class="local-variable">this</span>.to = to;
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">Container</span> getFrom() {
+        <span class="keyword">return</span> from;
+    }
+
+    <span class="directive">public</span> <span class="predefined-type">Container</span> getTo() {
+        <span class="keyword">return</span> to;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The new <code>transfer</code> method now looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> Transfer transfer(<span class="type">int</span> amount, Transfer transfer) {
+    <span class="predefined-type">Container</span> updatedFrom = transfer.getFrom().remove(amount);
+    <span class="predefined-type">Container</span> updatedTo = transfer.getTo().add(amount);
+    <span class="keyword">return</span> <span class="keyword">new</span> Transfer(updatedFrom, updatedTo);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that it only reads state from its input parameter.
+Consequently, it is decoupled from the <code>Container</code> object, which we can make explicit by moving it to its own class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">ContainerService</span> {
+
+    <span class="directive">public</span> <span class="directive">static</span> Transfer transfer(<span class="type">int</span> amount, Transfer transfer) {
+        <span class="predefined-type">Container</span> updatedFrom = transfer.getFrom().remove(amount);
+        <span class="predefined-type">Container</span> updatedTo = transfer.getTo().add(amount);
+        <span class="keyword">return</span> <span class="keyword">new</span> Transfer(updatedFrom, updatedTo);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Again, using the <code>static</code> modifier makes it explicit that no instance state is read nor written.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This is how transfers can be made with our new design:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Container</span> a = <span class="keyword">new</span> <span class="predefined-type">Container</span>(<span class="integer">80</span>);
+<span class="predefined-type">Container</span> b = <span class="keyword">new</span> <span class="predefined-type">Container</span>(<span class="integer">80</span>);
+Transfer input = <span class="keyword">new</span> Transfer(a, b);
+Transfer result = ContainerService.transfer(<span class="integer">20</span>, input);
+<span class="predefined-type">System</span>.out.println(result.getFrom().getContents()); <span class="comment">// prints 60</span>
+<span class="predefined-type">System</span>.out.println(result.getTo().getContents());   <span class="comment">// prints 100</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>How will it behave if an invalid transfer is requested?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Container</span> c = <span class="keyword">new</span> <span class="predefined-type">Container</span>(<span class="integer">80</span>);
+<span class="predefined-type">Container</span> d = <span class="keyword">new</span> <span class="predefined-type">Container</span>(<span class="integer">80</span>);
+<span class="keyword">try</span> {
+    Transfer input = <span class="keyword">new</span> Transfer(c, d);
+    <span class="comment">// the following call will fail</span>
+    Transfer result = ContainerService.transfer(<span class="integer">70</span>, input); <i class="conum" data-value="1"></i><b>(1)</b>
+} <span class="keyword">catch</span> (<span class="exception">IllegalArgumentException</span> e) {
+    <span class="predefined-type">System</span>.out.println(e.getMessage()); <span class="comment">// prints &quot;Exceeding capacity&quot; </span><i class="conum" data-value="2"></i><b>(2)</b>
+}
+<span class="predefined-type">System</span>.out.println(c.getContents());    <span class="comment">// prints 80 </span><i class="conum" data-value="3"></i><b>(3)</b>
+<span class="predefined-type">System</span>.out.println(d.getContents());    <span class="comment">// prints 80</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>An impossible transfer which exceeds capacity of target container <code>d</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Code flows to the <code>catch</code> clause, <code>result</code> will thus not be available (which makes sense).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><strong>Fixed</strong>: If the transfer fails, the amount is <strong>no longer</strong> deduced from container <code>c</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Phew, this was hard – but the code now works as expected!
+The functional programming principles of explicitly declaring input parameters and preventing side effects made the code more robust.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_map_filter_reduce">5.4. Map / Filter / Reduce</h3>
+<div class="paragraph">
+<p>Often, functional programming is associated with the map/filter/reduce design pattern.
+We have met this pattern in <a href="#section-stream-api">The Java 8 Stream API</a>, here it is again:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Stream&lt;<span class="predefined-type">String</span>&gt; words = Stream.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">hello</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">world</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">java</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">is</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">cool</span><span class="delimiter">&quot;</span></span>);
+<span class="type">long</span> numberOfFourLetterWords = words.
+        map(word -&gt; word.length()).          <span class="comment">// map</span>
+        filter(length -&gt; length == <span class="integer">4</span>).       <span class="comment">// filter</span>
+        count();                             <span class="comment">// reduce to single result</span>
+<span class="predefined-type">System</span>.out.println(numberOfFourLetterWords); <span class="comment">// prints 2</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But what is so "functional" about streams?
+In fact, the same problem could also be solved without using streams:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; words = <span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">hello</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">world</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">java</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">is</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">cool</span><span class="delimiter">&quot;</span></span>);
+<span class="type">long</span> numberOfFourLetterWords = <span class="integer">0</span>;
+<span class="keyword">for</span> (<span class="predefined-type">String</span> word : words) {
+    <span class="keyword">if</span> (word.length() == <span class="integer">4</span>) {
+        numberOfFourLetterWords++;
+    }
+}
+<span class="predefined-type">System</span>.out.println(numberOfFourLetterWords); <span class="comment">// prints 2</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This second style is known as imperative programming: Control structures like <code>for</code> and <code>if</code> determine how a sequence of statements is executed.
+In contrast, streams allow to express the same intentions <strong>without</strong> using control structures, solely by using functions.
+Extracting the lambda expressions to local variables makes this more visible:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Stream&lt;<span class="predefined-type">String</span>&gt; words = Stream.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">hello</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">world</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">java</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">is</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">cool</span><span class="delimiter">&quot;</span></span>);
+
+<span class="comment">// A function from String -&gt; Integer</span>
+Function&lt;<span class="predefined-type">String</span>, <span class="predefined-type">Integer</span>&gt; mapFunction = word -&gt; word.length();
+<span class="comment">// A function from Integer -&gt; Boolean</span>
+<span class="predefined-type">Predicate</span>&lt;<span class="predefined-type">Integer</span>&gt; filterFunction = length -&gt; length == <span class="integer">4</span>;
+
+<span class="type">long</span> numberOfFourLetterWords = words.
+        map(mapFunction).
+        filter(filterFunction).
+        count();
+<span class="predefined-type">System</span>.out.println(numberOfFourLetterWords);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In summary, using the functional approach of map/filter/reduce allows programmers to focus on the heart of the computation rather than on the details of loops, branches, and control flow.</p>
+</div>
+<div class="paragraph">
+<p>Because the details of loops, branches, and control flow are no longer controlled by the programmer, code written in a functional style is very suitable for parallel execution, e.g. on a distributed cluster (Google&#8217;s <a href="https://en.wikipedia.org/wiki/MapReduce">MapReduce</a> technology is the most prominent example).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_summary">5.5. Summary</h3>
+<div class="paragraph">
+<p>Functional programming uses functions as the fundamental building blocks of a program.
+In Java, such functions are built by writing methods or lambda expressions which explicitly declare their input parameters and avoid any side effects.
+Functional programming makes programs easier to read and prevents certain types of errors.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resources_5">5.6. Resources</h3>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Kris Jenkins: What Is Functional Programming?
+</td>
+<td class="hdlist2">
+<p><a href="http://blog.jenkster.com/2015/12/what-is-functional-programming.html" class="bare">http://blog.jenkster.com/2015/12/what-is-functional-programming.html</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Google MapReduce
+</td>
+<td class="hdlist2">
+<p><a href="https://en.wikipedia.org/wiki/MapReduce" class="bare">https://en.wikipedia.org/wiki/MapReduce</a></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footnotes">
 <hr>
@@ -2688,8 +3262,8 @@ Angelika Langer: Lambda Tutorial
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.3.0<br>
-Last updated 2016-03-15 13:52:02 +01:00
+Version 1.4.0<br>
+Last updated 2016-03-21 09:40:15 +01:00
 </div>
 </div>
 </body>
