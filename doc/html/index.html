@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>Programming II</h1>
 <div class="details">
 <span id="author" class="author">Dominique Brodbeck &amp; Rahel Lüthy · Fachhochschule Nordwestschweiz · 2016</span><br>
-<span id="revnumber">version 1.5.1</span>
+<span id="revnumber">version 1.6.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -571,6 +571,16 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_map_filter_reduce">5.4. Map / Filter / Reduce</a></li>
 <li><a href="#_summary">5.5. Summary</a></li>
 <li><a href="#_resources_5">5.6. Resources</a></li>
+</ul>
+</li>
+<li><a href="#_graphical_user_interfaces">6. Graphical User Interfaces</a>
+<ul class="sectlevel2">
+<li><a href="#_introduction">6.1. Introduction</a></li>
+<li><a href="#_building_guis_with_java">6.2. Building GUIs with Java</a></li>
+<li><a href="#_creating_and_positioning_gui_components">6.3. Creating and Positioning GUI Components</a></li>
+<li><a href="#_handling_user_events">6.4. Handling User Events</a></li>
+<li><a href="#_custom_drawing">6.5. Custom Drawing</a></li>
+<li><a href="#gui-resources">6.6. Resources</a></li>
 </ul>
 </li>
 </ul>
@@ -898,7 +908,7 @@ When you write the program, you do not know how many values the file will contai
 <div class="sidebarblock">
 <div class="content">
 <div class="paragraph">
-<p><strong>Solution:</strong> The <code>List</code> data structure provides an array-alternative which grows dynamically whenever new elements are added.</p>
+<p><strong>Solution:</strong> The <code>List</code> data structure provides an array-alternative that grows dynamically whenever new elements are added.</p>
 </div>
 </div>
 </div>
@@ -2807,7 +2817,7 @@ In fact, this method</p>
 </div>
 <div class="paragraph">
 <p>The method has <strong>side effects</strong>: It reads values which are not declared as input parameters and writes values in addition to returning a result.
-Its these side effects that make the method hard to understand and cause it to deviate from the math function characteristics.</p>
+It is these side effects that make the method hard to understand and cause it to deviate from the math function characteristics.</p>
 </div>
 <div class="paragraph">
 <p>The following <code>add</code> method is much easier to read because it has no side effects and is thus similar to a math function:</p>
@@ -3253,6 +3263,658 @@ Google MapReduce
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_graphical_user_interfaces">6. Graphical User Interfaces</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>So far, the programs that we wrote in this course communicated with the world mainly through reading and writing files. In this chapter you will learn how to create a richer user experience through the use of a Graphical User Interface (GUI).</p>
+</div>
+<div class="sect2">
+<h3 id="_introduction">6.1. Introduction</h3>
+<div class="paragraph">
+<p>A typical computer consists of&#8230;&#8203;</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a place (the memory) where you can store data and instructions (a program, or as the hipsters call it today, an app),</p>
+</li>
+<li>
+<p>a little machine (the CPU) that can read the instructions and then load the data and convert it into some piece of useful information,</p>
+</li>
+<li>
+<p>and some devices to communicate with the world, for example a keyboard to type in data or a screen to display the information.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In the beginning, you were able to run a single program that had direct access to all the devices of the computer. Of course no one had the patience to wait for a single program to execute. So they wrote a special program (the operating system) that pretends to run several programs at the same time, by giving each of them in turn a little slice of time and access to the devices. No-one noticed and everyone was happy.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="https://en.wikipedia.org/wiki/VT100#/media/File:DEC_VT100_terminal.jpg"><img src="06-gui/terminal.jpg" alt="Terminal" width="300"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>In order to share the screen among the programs, they came up with the idea to allocate a rectangular area of the screen to each program. The program can then draw graphical symbols into that area. They also invented a device that allows users to position a marker on the screen, and to trigger an event at that position by pressing a button on the device. It was called a mouse, and the name stuck even though its resemblance with a little rodent is not so obvious anymore.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/mouse.jpg" alt="Mouse" width="200">
+</div>
+</div>
+<div class="paragraph">
+<p>These rectangular areas are decorated with a thin frame so that they look like windows. Some symbols are also placed on that frame that allow direct manipulation with the mouse for useful actions such as resizing, minimizing, or closing of a window. A window can be made active by the user, e.g. by clicking on it with the mouse. The window is then in focus and the operating system delivers user events (e.g. mouse clicks, finger swipes, key presses) that happen in this window to the program that is associated with it.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="06-gui/window-decoration.png"><img src="06-gui/window-decoration.png" alt="Window with decoration" width="50%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>This concept of windows associated with apps, graphical symbols drawn into the windows, and input devices that produce events, is called a graphical user interface (GUI).</p>
+</div>
+<div class="paragraph">
+<p>On smaller computers, especially those that are carried around a lot and used to place phone calls while other people are trying to work or have a little peace while commuting back from a hard day at work on the train, the windows are usually full screen, switching between windows is done with dedicated buttons, and interaction through directly touching the screen with the fingers. The basic concepts are the same though.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+There are efforts to merge the two approaches, mainly by trying to coerce the functionalities on the bigger screens towards working the same way as on the small mobile touch-based screens, pissing off those former users, which ironically are the ones that develop the applications for the small mobile screens in the first place, but this is another story.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A GUI library allows a program to use the pixels inside these windows, process user events, and use the functionalities offered by the operating system.</p>
+</div>
+<div class="paragraph">
+<div class="title">Components</div>
+<p>A GUI library provides components that can be placed inside a window.
+Each window has a top-level container that is used to hold all the components, and to connect it with the operating system.</p>
+</div>
+<div class="paragraph">
+<p>There are different kinds of components:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>some components are like widgets (e.g., buttons, sliders, menus, labels, text fields, etc.)</p>
+</li>
+<li>
+<p>some components are drawing areas that you can draw into (e.g., lines, circles, rectangles, etc.)</p>
+</li>
+<li>
+<p>some components are containers that contain other components, and that are used to organize the layout of those components</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here are some examples of typical widgets:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="06-gui/gui-widgets.png"><img src="06-gui/gui-widgets.png" alt="Container widgets" width="50%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Here are some examples of typical containers:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="06-gui/gui-containers.png"><img src="06-gui/gui-containers.png" alt="Container components" width="50%"></a>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">Layout</div>
+<p>All components are placed inside such container components.
+Containers are components themselves and can be placed inside containers.</p>
+</div>
+<div class="paragraph">
+<p>A layout manager provides rules about how to arrange the components inside containers.
+Typical types of layouts are: grid, box (rows, columns), flow, absolute</p>
+</div>
+<div class="paragraph">
+<div class="title">Events</div>
+<p>Once all components are in place, the program enters an endless loop and waits for events.
+The operating system and the GUI components generate events if the users interact with them (e.g., mouse clicks, keyboard presses).
+A program can register a piece of code that gets triggered when there is an event, and that knows how to update the GUI components and the program logic.</p>
+</div>
+<div class="paragraph">
+<p>In summary, here is how a GUI works:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create components</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Create some GUI components, group them if desired</p>
+</li>
+<li>
+<p>Define what should happen if events are detected inside a component</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Place the components</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ask the operating system for a window</p>
+</li>
+<li>
+<p>Create a container inside this window</p>
+</li>
+<li>
+<p>Place the components into the container</p>
+</li>
+<li>
+<p>Tell the container how to arrange them</p>
+</li>
+<li>
+<p>Make the window visible</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Wait for events</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Enter an infinite loop and wait for events</p>
+</li>
+<li>
+<p>If an event happens then dispatch it to the component</p>
+</li>
+<li>
+<p>Let the component execute the actions that are defined for this event</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>There are many GUI libraries for the various programming languages, here are some prominent examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Java: Swing, JavaFX</p>
+</li>
+<li>
+<p>Python: TkInter</p>
+</li>
+<li>
+<p>C++: Qt, WxWidgets</p>
+</li>
+<li>
+<p>C#: WPF</p>
+</li>
+<li>
+<p>Objective-C: Cocoa</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_building_guis_with_java">6.2. Building GUIs with Java</h3>
+<div class="paragraph">
+<p>When programming with Java, there are two options for creating GUIs: Swing and JavaFX. Swing is the original GUI library that came bundled with Java. In recent years, a more modern GUI library was developed and since Java 8 is now also bundled with Java. Swing is not developed any further, and it is generally discouraged to start developing new applications based on Swing. In this course we will learn how to use the JavaFX GUI library.</p>
+</div>
+<div class="paragraph">
+<p>JavaFX is part of Java 8 SE and is ready to use. The Javadoc documentation for JavaFX however is separate from the Java API documentation. See the <a href="#gui-resources">Resources</a> section for links.</p>
+</div>
+<div class="paragraph">
+<p>JavaFX follows the principles outlined in the introduction section.</p>
+</div>
+<div class="paragraph">
+<p>The top-level concept is represented by the class <code>Stage</code>. It is a somewhat funny name, but essentially it represents a window provided by the operating system. A <code>Stage</code> thus can have  a title, and provides functionality to influence the decoration (frame, transparency, full screen, etc.) and behavior (resizable, always on top, etc.) of the window.</p>
+</div>
+<div class="paragraph">
+<p>GUI components can not be directly placed onto a <code>Stage</code>. We need a container for that, a <code>Scene</code>.
+It determines the size of the rectangle that the window occupies on the screen, and other attributes of the graphics system (anti-aliasing, depth buffer, etc.).
+More importantly though, the <code>Scene</code> is the top of the component hierarchy, which is also called a scene graph for that reason. A <code>Scene</code> therefore has exactly one <code>Parent</code> node.</p>
+</div>
+<div class="paragraph">
+<p>There are two types of nodes, branch nodes (where the tree branches, can contain other nodes) and leaf nodes.
+The following diagram shows some selected classes of the JavaFX component hierarchy.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="06-gui/javafx-components-overview.png"><img src="06-gui/javafx-components-overview.png" alt="JavaFX Component Hierarchy" width="50%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>But let&#8217;s write a simple JavaFX program now.</p>
+</div>
+<div class="paragraph">
+<p>In order to take care of the infinite event loop, JavaFX provides a class called <code>Application</code>. It contains the parts of initializing the graphics system and managing the event loop. In order to use this functionality, our program can simply extend the <code>Application</code> class and inherit from it. Our code to generate and layout the GUI components, and to define how to react to events then goes in the method <code>start()</code> that we override. The <code>Application</code> class calls <code>start()</code> at the right moment, just before entering the event loop.</p>
+</div>
+<div class="paragraph">
+<p>In order to bootstrap and run the whole thing, the <code>main()</code> method of our program calls <code>launch()</code>.</p>
+</div>
+<div class="paragraph">
+<p>Enough now, show me the code!</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">javafx.application.Application</span>;
+<span class="keyword">import</span> <span class="include">javafx.scene.Scene</span>;
+<span class="keyword">import</span> <span class="include">javafx.scene.control.Button</span>;
+<span class="keyword">import</span> <span class="include">javafx.scene.layout.Pane</span>;
+<span class="keyword">import</span> <span class="include">javafx.stage.Stage</span>;
+
+<span class="directive">public</span> <span class="type">class</span> <span class="class">HelloJavaFX</span> <span class="directive">extends</span> Application {
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">void</span> start(Stage stage) {
+
+        <span class="comment">// Create a GUI component</span>
+        <span class="predefined-type">Button</span> button = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Click me...</span><span class="delimiter">&quot;</span></span>);
+
+        <span class="comment">// Define what should happen if an event is detected on this component</span>
+        button.setOnAction(
+                actionEvent -&gt; button.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: red;</span><span class="delimiter">&quot;</span></span>)
+        );
+
+        <span class="comment">// Create a container into which to place the component</span>
+        Pane pane = <span class="keyword">new</span> Pane();
+        pane.getChildren().add(button);
+
+        <span class="comment">// Create the scene</span>
+        Scene scene = <span class="keyword">new</span> Scene(pane, <span class="integer">300</span>, <span class="integer">200</span>);
+
+        <span class="comment">// Add the scene to the stage, decorate and show it</span>
+        stage.setScene(scene);
+        stage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello JavaFX!</span><span class="delimiter">&quot;</span></span>);
+        stage.show();
+    }
+
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+        launch(args);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Great, a window with a button!</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/hello-javafx.png" alt="Hello JavaFX">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creating_and_positioning_gui_components">6.3. Creating and Positioning GUI Components</h3>
+<div class="paragraph">
+<p>Now that we have the basic GUI infrastructure in place, let&#8217;s have a look at how to create GUI components and how to position them inside a window.</p>
+</div>
+<div class="paragraph">
+<p>First, we add a second button.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Button</span> button = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Click me...</span><span class="delimiter">&quot;</span></span>);
+
+<span class="predefined-type">Button</span> helpButton = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Help</span><span class="delimiter">&quot;</span></span>);
+
+Pane pane = <span class="keyword">new</span> Pane();
+pane.getChildren().add(button);
+pane.getChildren().add(helpButton);
+
+Scene scene = <span class="keyword">new</span> Scene(pane, <span class="integer">300</span>, <span class="integer">200</span>);
+
+stage.setScene(scene);
+stage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello JavaFX!</span><span class="delimiter">&quot;</span></span>);
+stage.show();</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/layout-none.png" alt="No layout">
+</div>
+</div>
+<div class="paragraph">
+<p>It works, but they are on top of each other. Not very useful, we need a way to position them inside the window.
+The <code>Button</code> provides methods to define the exact size and position, <code>relocate()</code> and <code>setPrefSize()</code>. Let&#8217;s try those&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p><em>Note that in the interest of brevity, we leave away the part about adding the <code>Scene</code> to the <code>Stage</code> from now on. It&#8217;s always the same anyway.</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Button</span> button = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Click me...</span><span class="delimiter">&quot;</span></span>);
+button.relocate(<span class="integer">20</span>, <span class="integer">20</span>);
+button.setPrefSize(<span class="integer">100</span>, <span class="integer">100</span>);
+
+<span class="predefined-type">Button</span> helpButton = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Help</span><span class="delimiter">&quot;</span></span>);
+helpButton.relocate(<span class="integer">50</span>, <span class="integer">80</span>);
+helpButton.setPrefSize(<span class="integer">200</span>, <span class="integer">50</span>);
+
+Pane pane = <span class="keyword">new</span> Pane();
+pane.getChildren().add(button);
+pane.getChildren().add(helpButton);
+
+Scene scene = <span class="keyword">new</span> Scene(pane, <span class="integer">300</span>, <span class="integer">200</span>);</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/layout-absolute.png" alt="Absolute layout">
+</div>
+</div>
+<div class="paragraph">
+<p>While this gives us full control, it seems rather cumbersome to build up a rich GUI by having to specify each and every pixel individually, and we want our GUI to adapt dynamically to changes in the window size, "responsive" so to speak.</p>
+</div>
+<div class="paragraph">
+<p>Up to now, we used a <code>Pane</code> as a container for our buttons. This class does not provide any support for laying out components. There are however a number of descendants of <code>Pane</code> that are smarter about that. They keep track of all the components that get added to the container, and automatically assign them a position in the window based on some layout strategy. The position is dynamically adapted as new components are added, or the container&#8217;s size changes. This is called layout management.</p>
+</div>
+<div class="paragraph">
+<p>The class <code>StackPane</code> is such a container component that performs layout management. Let&#8217;s see what happens if we use it instead of the vanilla <code>Pane</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Button</span> button = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Click me...</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">Button</span> helpButton = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Help</span><span class="delimiter">&quot;</span></span>);
+
+StackPane pane = <span class="keyword">new</span> StackPane();
+pane.getChildren().add(button);
+pane.getChildren().add(helpButton);
+
+Scene scene = <span class="keyword">new</span> Scene(pane, <span class="integer">300</span>, <span class="integer">200</span>);</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/layout-stack.png" alt="Stack layout">
+</div>
+</div>
+<div class="paragraph">
+<p>The two buttons are now positioned automatically in the center of the window. And they stay there if the size of the window changes. The layout adapts.</p>
+</div>
+<div class="paragraph">
+<p>Wonderful, but who wants buttons that are on top of each other?</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s try another layout strategy, a <code>FlowPane</code>. In order to make our GUI a bit richer, we add two more components, two text labels.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Button</span> button = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Click me...</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">Button</span> helpButton = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Help</span><span class="delimiter">&quot;</span></span>);
+
+<span class="predefined-type">Label</span> label = <span class="keyword">new</span> <span class="predefined-type">Label</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">My first button:</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">Label</span> label2 = <span class="keyword">new</span> <span class="predefined-type">Label</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">The second button:</span><span class="delimiter">&quot;</span></span>);
+
+FlowPane pane = <span class="keyword">new</span> FlowPane();
+pane.getChildren().addAll(label, button, label2, helpButton);
+
+Scene scene = <span class="keyword">new</span> Scene(pane, <span class="integer">300</span>, <span class="integer">200</span>);</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/layout-flow.png" alt="Flow layout">
+</div>
+</div>
+<div class="paragraph">
+<p>Try resizing the window in various ways, to discover the layout strategy of the <code>FlowPane</code>. The components are simply placed one next to the other, like words on a line of text. When there is no more space then it wraps around.</p>
+</div>
+<div class="paragraph">
+<p>The containers and their layout strategies can be configured in various ways. Some properties such as the horizontal and vertical gaps between components are specific to a container and have their own methods (e.g., <code>setHgap()</code>, <code>setVgap()</code>). Some properties are more generic and can be changed through the generic <code>setStyle()</code> method.</p>
+</div>
+<div class="paragraph">
+<p>A FlowPane can also be put inside a StackPane, so that it is centered in the window and can be inset from the border.</p>
+</div>
+<div class="paragraph">
+<p>It is not always easy to figure out how to change a desired property, and what properties are available in the first place. The JavaFX API documentation and your favorite search engine are your friends here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Button</span> button = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Click me...</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">Button</span> helpButton = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Help</span><span class="delimiter">&quot;</span></span>);
+
+<span class="predefined-type">Label</span> label = <span class="keyword">new</span> <span class="predefined-type">Label</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">My first button:</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">Label</span> label2 = <span class="keyword">new</span> <span class="predefined-type">Label</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">The second button:</span><span class="delimiter">&quot;</span></span>);
+
+FlowPane flowPane = <span class="keyword">new</span> FlowPane();
+flowPane.setHgap(<span class="integer">10</span>);
+flowPane.setVgap(<span class="integer">5</span>);
+
+flowPane.setStyle(
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: #86d96c;</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-border-color: darkorange;</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-border-width: 3;</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-padding: 30;</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-border-insets: 50;</span><span class="delimiter">&quot;</span></span> +
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-insets: 50;</span><span class="delimiter">&quot;</span></span>
+);
+
+flowPane.getChildren().addAll(label, button, label2, helpButton);
+
+StackPane stackPane = <span class="keyword">new</span> StackPane(flowPane);
+StackPane.setMargin(flowPane, <span class="keyword">new</span> <span class="predefined-type">Insets</span>(<span class="integer">20</span>));
+
+Scene scene = <span class="keyword">new</span> Scene(stackPane, <span class="integer">300</span>, <span class="integer">200</span>);</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/layout-flow-configure.png" alt="Flow layout configured">
+</div>
+</div>
+<div class="paragraph">
+<p>Another very useful pair of containers are HBox and VBox. They represent simple row and column layouts, and can be nested to produce sophisticated layouts with many components. Divide and conquer!</p>
+</div>
+<div class="paragraph">
+<p>To debug layout issues, it has proven useful to temporarily color the backgrounds of the individual containers.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Button</span> button = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Click me...</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">Button</span> helpButton = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Help</span><span class="delimiter">&quot;</span></span>);
+
+<span class="predefined-type">Label</span> label = <span class="keyword">new</span> <span class="predefined-type">Label</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">My first button:</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">Label</span> label2 = <span class="keyword">new</span> <span class="predefined-type">Label</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">The second button:</span><span class="delimiter">&quot;</span></span>);
+
+HBox firstLine = <span class="keyword">new</span> HBox();
+firstLine.getChildren().addAll(label, button);
+firstLine.setAlignment(Pos.CENTER);
+firstLine.setSpacing(<span class="integer">10</span>);
+firstLine.setPadding(<span class="keyword">new</span> <span class="predefined-type">Insets</span>(<span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>));
+firstLine.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: cornflowerblue;</span><span class="delimiter">&quot;</span></span>);
+
+HBox secondLine = <span class="keyword">new</span> HBox();
+secondLine.getChildren().addAll(label2, helpButton);
+secondLine.setAlignment(Pos.CENTER);
+secondLine.setSpacing(<span class="integer">10</span>);
+secondLine.setPadding(<span class="keyword">new</span> <span class="predefined-type">Insets</span>(<span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>));
+secondLine.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: seagreen;</span><span class="delimiter">&quot;</span></span>);
+
+VBox vBox = <span class="keyword">new</span> VBox();
+vBox.getChildren().addAll(firstLine, secondLine);
+vBox.setAlignment(Pos.CENTER);
+vBox.setSpacing(<span class="integer">10</span>);
+vBox.setPadding(<span class="keyword">new</span> <span class="predefined-type">Insets</span>(<span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>));
+vBox.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: darkorange;</span><span class="delimiter">&quot;</span></span>);
+
+StackPane pane = <span class="keyword">new</span> StackPane();
+pane.getChildren().add(vBox);
+
+Scene scene = <span class="keyword">new</span> Scene(pane, <span class="integer">300</span>, <span class="integer">200</span>);</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/layout-box.png" alt="Box layout">
+</div>
+</div>
+<div class="paragraph">
+<p>Here are the relevant sections in the official tutorials:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://docs.oracle.com/javase/8/javafx/layout-tutorial/builtin_layouts.htm">Using Built-in Layout Panes</a></p>
+</li>
+<li>
+<p><a href="http://docs.oracle.com/javase/8/javafx/layout-tutorial/size_align.htm">Tips for Sizing and Aligning Nodes</a></p>
+</li>
+<li>
+<p><a href="http://docs.oracle.com/javase/8/javafx/get-started-tutorial/form.htm">Creating a Form in JavaFX</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_handling_user_events">6.4. Handling User Events</h3>
+<div class="paragraph">
+<p>When you use your computer&#8217;s input devices (mouse, keyboard, etc.) then all sorts of events are triggered. Which GUI component the events are delivered to by the GUI library depends on many factors, but for most practical purposes, it&#8217;s the component that currently has the focus (i.e., the mouse pointer is over it, the text field is selected, etc.).</p>
+</div>
+<div class="paragraph">
+<p>JavaFX provides a sophisticated system of event filters and event handlers, but for standard applications, there are simple convenience methods.</p>
+</div>
+<div class="paragraph">
+<p>Event handling code can be registered directly on a component by means of the <code>setOnXXX()</code> methods, where XXX is the type of event that should be handled. Examples are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>setOnAction()</p>
+</li>
+<li>
+<p>setOnMousePressed()</p>
+</li>
+<li>
+<p>setOnKeyPressed()</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here is a simple example of a GUI that lets users enter a text into an input field, converts it into all uppercase letters, and then displays the result. The Clear button clears the input field. Note how the input field changes background color as the mouse pointer moves over it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Create the GUI components</span>
+
+<span class="predefined-type">Label</span> inputLabel = <span class="keyword">new</span> <span class="predefined-type">Label</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Type in some text and press Enter:</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">TextField</span> inputTextField = <span class="keyword">new</span> <span class="predefined-type">TextField</span>();
+<span class="predefined-type">Button</span> clearButton = <span class="keyword">new</span> <span class="predefined-type">Button</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Clear</span><span class="delimiter">&quot;</span></span>);
+
+<span class="predefined-type">Label</span> label = <span class="keyword">new</span> <span class="predefined-type">Label</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">You wrote:</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">Label</span> resultLabel = <span class="keyword">new</span> <span class="predefined-type">Label</span>();
+
+<span class="comment">// Define what events should be handled, and what to do about them</span>
+
+inputTextField.setOnAction(actionEvent -&gt; {
+    resultLabel.setText(inputTextField.getText().toUpperCase());
+    label.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-font-weight: bold</span><span class="delimiter">&quot;</span></span>);
+    label.setTextFill(<span class="predefined-type">Color</span>.RED);
+});
+
+clearButton.setOnAction(actionEvent -&gt; {
+    inputTextField.setText(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
+    resultLabel.setText(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
+    label.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-font-weight: normal</span><span class="delimiter">&quot;</span></span>);
+    label.setTextFill(<span class="predefined-type">Color</span>.GREY);
+});
+
+inputTextField.setOnMouseEntered(event -&gt; inputTextField.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: lightblue</span><span class="delimiter">&quot;</span></span>));
+inputTextField.setOnMouseExited(event -&gt; inputTextField.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: white</span><span class="delimiter">&quot;</span></span>));
+
+<span class="comment">// Position the components</span>
+
+HBox firstLine = <span class="keyword">new</span> HBox();
+firstLine.getChildren().addAll(inputLabel, inputTextField, clearButton);
+firstLine.setAlignment(Pos.CENTER);
+firstLine.setSpacing(<span class="integer">10</span>);
+firstLine.setPadding(<span class="keyword">new</span> <span class="predefined-type">Insets</span>(<span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>));
+
+HBox secondLine = <span class="keyword">new</span> HBox();
+secondLine.getChildren().addAll(label, resultLabel);
+secondLine.setAlignment(Pos.CENTER);
+secondLine.setSpacing(<span class="integer">10</span>);
+secondLine.setPadding(<span class="keyword">new</span> <span class="predefined-type">Insets</span>(<span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>));
+
+VBox vBox = <span class="keyword">new</span> VBox();
+vBox.getChildren().addAll(firstLine, secondLine);
+vBox.setAlignment(Pos.CENTER);
+vBox.setSpacing(<span class="integer">10</span>);
+vBox.setPadding(<span class="keyword">new</span> <span class="predefined-type">Insets</span>(<span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>, <span class="integer">5</span>));
+
+StackPane pane = <span class="keyword">new</span> StackPane();
+pane.getChildren().add(vBox);
+
+<span class="comment">// Create the scene and kick it off</span>
+
+Scene scene = <span class="keyword">new</span> Scene(pane, <span class="integer">500</span>, <span class="integer">200</span>);
+
+stage.setScene(scene);
+stage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello JavaFX!</span><span class="delimiter">&quot;</span></span>);
+stage.show();</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/events.png" alt="Event handling">
+</div>
+</div>
+<div class="paragraph">
+<p>Here are the relevant sections in the official tutorials:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://docs.oracle.com/javase/8/javafx/events-tutorial/processing.htm">Processing Events</a></p>
+</li>
+<li>
+<p><a href="http://docs.oracle.com/javase/8/javafx/events-tutorial/convenience_methods.htm">Working with Convenience Methods</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_custom_drawing">6.5. Custom Drawing</h3>
+<div class="paragraph">
+<p>Coming soon to a browser near you&#8230;&#8203;</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="gui-resources">6.6. Resources</h3>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+JavaFX API Documentation (on-line)
+</td>
+<td class="hdlist2">
+<p><a href="http://docs.oracle.com/javase/8/javafx/api/toc.htm" class="bare">http://docs.oracle.com/javase/8/javafx/api/toc.htm</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+JavaFX API Documentation (Download)
+</td>
+<td class="hdlist2">
+<p><a href="http://www.oracle.com/technetwork/java/javase/documentation/jdk8-doc-downloads-2133158.html" class="bare">http://www.oracle.com/technetwork/java/javase/documentation/jdk8-doc-downloads-2133158.html</a></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footnotes">
 <hr>
@@ -3262,8 +3924,8 @@ Google MapReduce
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.5.1<br>
-Last updated 2016-03-23 12:16:23 +01:00
+Version 1.6.0<br>
+Last updated 2016-04-01 16:34:45 +02:00
 </div>
 </div>
 </body>
