@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>Programming II</h1>
 <div class="details">
 <span id="author" class="author">Dominique Brodbeck &amp; Rahel Lüthy · Fachhochschule Nordwestschweiz · 2016</span><br>
-<span id="revnumber">version 1.6.0</span>
+<span id="revnumber">version 1.6.1-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -579,8 +579,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_building_guis_with_java">6.2. Building GUIs with Java</a></li>
 <li><a href="#_creating_and_positioning_gui_components">6.3. Creating and Positioning GUI Components</a></li>
 <li><a href="#_handling_user_events">6.4. Handling User Events</a></li>
-<li><a href="#_custom_drawing">6.5. Custom Drawing</a></li>
-<li><a href="#gui-resources">6.6. Resources</a></li>
+<li><a href="#_shapes_n_properties">6.5. Shapes&#8217;n&#8217;Properties</a></li>
+<li><a href="#_custom_drawing">6.6. Custom Drawing</a></li>
+<li><a href="#gui-resources">6.7. Resources</a></li>
 </ul>
 </li>
 </ul>
@@ -3488,7 +3489,7 @@ More importantly though, the <code>Scene</code> is the top of the component hier
 <p>There are two types of nodes, branch nodes (where the tree branches, can contain other nodes) and leaf nodes.
 The following diagram shows some selected classes of the JavaFX component hierarchy.</p>
 </div>
-<div class="imageblock">
+<div id="component-hierarchy" class="imageblock">
 <div class="content">
 <a class="image" href="06-gui/javafx-components-overview.png"><img src="06-gui/javafx-components-overview.png" alt="JavaFX Component Hierarchy" width="50%"></a>
 </div>
@@ -3885,13 +3886,258 @@ stage.show();</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_custom_drawing">6.5. Custom Drawing</h3>
+<h3 id="_shapes_n_properties">6.5. Shapes&#8217;n&#8217;Properties</h3>
+<div class="paragraph">
+<p>So far we have looked at Regions. This corresponds to the leftmost branch in our sketch of the <a href="#component-hierarchy">JavaFX component hierarchy</a>.</p>
+</div>
+<div class="paragraph">
+<p>The two other branches are <code>Shape</code> and <code>Canvas</code>.
+In this section we will look at <code>Shape</code>.
+We will get to <code>Canvas</code> in the next chapter.
+The main difference that we can see from looking at the component hierarchy is that <code>Shape</code> does not sub-class <code>Parent</code>.
+Therefore, <code>Shape</code> and its children can not act as containers.
+This is because they represent basic graphic shapes such as <code>Line</code>, <code>Rectangle</code>, <code>Circle</code>, or the generic <code>Polygon</code>.</p>
+</div>
+<div class="paragraph">
+<p>Shapes have common properties such as the stroke (color, thickness, etc.) to draw the outline, and the pattern (color, pattern, etc.) to fill the inside.</p>
+</div>
+<div class="paragraph">
+<p>Shapes can be added to a pane with a layout manager, just as we have seen with the other descendants of <code>Node</code>.
+More commonly though, we want to place them at exact absolute positions (e.g., to draw some data-driven graph that is made up from generic shapes).
+For this, the plain <code>Pane</code> comes in handy, since it does not perform any layout at all.</p>
+</div>
+<div class="paragraph">
+<p>Here is a simple circle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Create the shape (a circle at position 150,150 and radius 100)</span>
+
+Circle circle = <span class="keyword">new</span> Circle(<span class="integer">150</span>, <span class="integer">150</span>, <span class="integer">100</span>);
+
+Pane basicPane = <span class="keyword">new</span> Pane();
+basicPane.setPrefSize(<span class="integer">500</span>, <span class="integer">500</span>);
+basicPane.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: lightblue</span><span class="delimiter">&quot;</span></span>);
+basicPane.getChildren().add(circle);
+
+<span class="comment">// Layout the components</span>
+
+VBox vBox = <span class="keyword">new</span> VBox(basicPane);
+
+<span class="comment">// Add scene to stage and show it</span>
+
+Scene scene = <span class="keyword">new</span> Scene(vBox, <span class="integer">500</span>, <span class="integer">500</span>);
+stage.setScene(scene);
+stage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello JavaFX!</span><span class="delimiter">&quot;</span></span>);
+stage.show();</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/circle.png" alt="Circle shape">
+</div>
+</div>
+<div class="paragraph">
+<p>Try resizing the window. The circle stays put.</p>
+</div>
+<div class="paragraph">
+<p>Now let&#8217;s make things more interactive, and use a <code>Slider</code> to change the radius of the circle.
+We need to obtain the current value of the slider each time it moves a bit to the right or to the left.
+So far we were able to use the <code>setOnAction()</code> convenience method to handle events on components.
+For the slider this does not work, since the movement of the slider does not simply trigger an action like a button, but changes a value.</p>
+</div>
+<div class="paragraph">
+<p>When we have a closer look at the <a href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Slider.html">documentation of the <code>Slider</code> class</a>, then we notice that the value of the slider is not a simple double value, but a <code>DoubleProperty</code>.
+Properties are like simple values on steroids.
+They are classes that wrap the simple values and provide additional functionality, in particular the possibility to observe them and get notified when the value changes.</p>
+</div>
+<div class="paragraph">
+<p>The following code shows how to do that. Four alternative versions are shown, from the most explicit to the most concise.
+They all do exactly the same though. It&#8217;s just a different syntax.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Create the slider</span>
+
+Slider slider = <span class="keyword">new</span> Slider(<span class="integer">0</span>, <span class="integer">200</span>, <span class="integer">100</span>);
+slider.setShowTickMarks(<span class="predefined-constant">true</span>);
+slider.setShowTickLabels(<span class="predefined-constant">true</span>);
+
+<span class="comment">// Create the shape</span>
+
+Circle circle = <span class="keyword">new</span> Circle(<span class="integer">150</span>, <span class="integer">150</span>, slider.getValue());
+
+Pane basicPane = <span class="keyword">new</span> Pane();
+basicPane.setPrefSize(<span class="integer">500</span>, <span class="integer">500</span>);
+basicPane.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: lightblue</span><span class="delimiter">&quot;</span></span>);
+basicPane.getChildren().add(circle);
+
+<span class="comment">// Define the logic</span>
+
+<span class="comment">// Version 1: Explicitly create an instance of the ChangeListener class and add it to the property</span>
+<span class="predefined-type">ChangeListener</span>&lt;<span class="predefined-type">Number</span>&gt; changeListener = <span class="keyword">new</span> <span class="predefined-type">ChangeListener</span>&lt;<span class="predefined-type">Number</span>&gt;() {
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">void</span> changed(ObservableValue&lt;? <span class="directive">extends</span> <span class="predefined-type">Number</span>&gt; observableValue, <span class="predefined-type">Number</span> number, <span class="predefined-type">Number</span> t1) {
+        circle.setRadius(slider.getValue());
+    }
+};
+
+slider.valueProperty().addListener(changeListener);
+
+<span class="comment">// Version 2: Create an anonymous instance and add it to the property</span>
+slider.valueProperty().addListener(<span class="keyword">new</span> <span class="predefined-type">ChangeListener</span>&lt;<span class="predefined-type">Number</span>&gt;() {
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">void</span> changed(ObservableValue&lt;? <span class="directive">extends</span> <span class="predefined-type">Number</span>&gt; observableValue, <span class="predefined-type">Number</span> oldValue, <span class="predefined-type">Number</span> newValue) {
+        circle.setRadius(slider.getValue());
+    }
+});
+
+<span class="comment">// Version 3: Directly add the code in the form of a lambda expression</span>
+slider.valueProperty().addListener((observableValue, oldValue, newValue) -&gt; {
+    circle.setRadius(slider.getValue());
+});
+
+<span class="comment">// Version 4: The most concise, a single line lambda expression</span>
+slider.valueProperty().addListener((observableValue, oldValue, newValue) -&gt; circle.setRadius(slider.getValue()));
+
+
+<span class="comment">// Layout the components</span>
+
+VBox vBox = <span class="keyword">new</span> VBox(basicPane, slider);
+
+<span class="comment">// Add scene to stage and show it</span>
+
+Scene scene = <span class="keyword">new</span> Scene(vBox, <span class="integer">500</span>, <span class="integer">500</span>);
+stage.setScene(scene);
+stage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello JavaFX!</span><span class="delimiter">&quot;</span></span>);
+stage.show();</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/slider.png" alt="Slider">
+</div>
+</div>
+<div class="paragraph">
+<p>Because observing a property, and then adapting another property if there is a change, is something that is done quite often, there is additional functionality to make the developer&#8217;s life easier.
+Properties can be directly bound to another property through the use of the <code>bind()</code> method.
+In our example, since the radius of the circle is also a property, we can directly bind it to the slider value.
+See below for how short this has become now:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Create the slider</span>
+
+Slider slider = <span class="keyword">new</span> Slider(<span class="integer">0</span>, <span class="integer">200</span>, <span class="integer">100</span>);
+slider.setShowTickMarks(<span class="predefined-constant">true</span>);
+slider.setShowTickLabels(<span class="predefined-constant">true</span>);
+
+<span class="comment">// Create the shape</span>
+
+Circle circle = <span class="keyword">new</span> Circle(<span class="integer">150</span>, <span class="integer">150</span>, slider.getValue());
+
+Pane basicPane = <span class="keyword">new</span> Pane();
+basicPane.setPrefSize(<span class="integer">500</span>, <span class="integer">500</span>);
+basicPane.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: lightblue</span><span class="delimiter">&quot;</span></span>);
+basicPane.getChildren().add(circle);
+
+<span class="comment">// Define the logic</span>
+
+circle.radiusProperty().bind(slider.valueProperty());
+
+<span class="comment">// Layout the components</span>
+
+VBox vBox = <span class="keyword">new</span> VBox(basicPane, slider);
+
+<span class="comment">// Add scene to stage and show it</span>
+
+Scene scene = <span class="keyword">new</span> Scene(vBox, <span class="integer">500</span>, <span class="integer">500</span>);
+stage.setScene(scene);
+stage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello JavaFX!</span><span class="delimiter">&quot;</span></span>);
+stage.show();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, let&#8217;s add some mouse interaction, just because we can. And because it&#8217;s fun.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Create the slider</span>
+
+Slider slider = <span class="keyword">new</span> Slider(<span class="integer">0</span>, <span class="integer">200</span>, <span class="integer">100</span>);
+slider.setShowTickMarks(<span class="predefined-constant">true</span>);
+slider.setShowTickLabels(<span class="predefined-constant">true</span>);
+
+<span class="comment">// Create the shape</span>
+
+Circle circle = <span class="keyword">new</span> Circle(<span class="integer">150</span>, <span class="integer">150</span>, slider.getValue());
+
+Pane shapePane = <span class="keyword">new</span> Pane();
+shapePane.setPrefSize(<span class="integer">500</span>, <span class="integer">500</span>);
+shapePane.setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: lightblue</span><span class="delimiter">&quot;</span></span>);
+shapePane.getChildren().add(circle);
+
+<span class="comment">// Define the logic</span>
+
+circle.radiusProperty().bind(slider.valueProperty());
+
+<span class="comment">// The Pane class also has properties, but we can not directly bind to them here</span>
+<span class="comment">// as we need to transform the value that we get.</span>
+<span class="comment">// This always centers the circle in the pane.</span>
+shapePane.widthProperty().addListener((observableValue, number, t1) -&gt; circle.setCenterX(shapePane.getWidth() / <span class="integer">2</span>));
+shapePane.heightProperty().addListener((observableValue, number, t1) -&gt; circle.setCenterY(shapePane.getHeight() / <span class="integer">2</span>));
+
+circle.setOnMouseEntered(event -&gt; {
+    circle.setStrokeWidth(<span class="integer">5</span>);
+    circle.setStroke(<span class="predefined-type">Color</span>.RED);
+});
+
+circle.setOnMouseExited((<span class="predefined-type">MouseEvent</span> event) -&gt; circle.setStrokeWidth(<span class="integer">0</span>));
+
+circle.setOnMouseClicked(event -&gt; {
+    <span class="keyword">if</span> (circle.getFill().equals(<span class="predefined-type">Color</span>.YELLOW)) {
+        circle.setFill(<span class="predefined-type">Color</span>.BLACK);
+    } <span class="keyword">else</span> {
+        circle.setFill(<span class="predefined-type">Color</span>.YELLOW);
+    }
+});
+
+<span class="comment">// Layout the components</span>
+
+VBox vBox = <span class="keyword">new</span> VBox(shapePane, slider);
+
+<span class="comment">// Add scene to stage and show it</span>
+
+Scene scene = <span class="keyword">new</span> Scene(vBox, <span class="integer">500</span>, <span class="integer">500</span>);
+stage.setScene(scene);
+stage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello JavaFX!</span><span class="delimiter">&quot;</span></span>);
+stage.show();</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/mouse.png" alt="Mouse interaction">
+</div>
+</div>
+<div class="paragraph">
+<p>Here are the relevant sections in the official tutorials:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://docs.oracle.com/javase/8/javafx/properties-binding-tutorial/binding.htm">Using JavaFX Properties and Binding</a> (Caution: quite technical)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_custom_drawing">6.6. Custom Drawing</h3>
 <div class="paragraph">
 <p>Coming soon to a browser near you&#8230;&#8203;</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="gui-resources">6.6. Resources</h3>
+<h3 id="gui-resources">6.7. Resources</h3>
 <div class="hdlist">
 <table>
 <tr>
@@ -3910,6 +4156,14 @@ JavaFX API Documentation (Download)
 <p><a href="http://www.oracle.com/technetwork/java/javase/documentation/jdk8-doc-downloads-2133158.html" class="bare">http://www.oracle.com/technetwork/java/javase/documentation/jdk8-doc-downloads-2133158.html</a></p>
 </td>
 </tr>
+<tr>
+<td class="hdlist1">
+Java Client Technologies Tutorials 
+</td>
+<td class="hdlist2">
+<p><a href="http://docs.oracle.com/javase/8/javase-clienttechnologies.htm" class="bare">http://docs.oracle.com/javase/8/javase-clienttechnologies.htm</a></p>
+</td>
+</tr>
 </table>
 </div>
 </div>
@@ -3924,7 +4178,7 @@ JavaFX API Documentation (Download)
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.6.0<br>
+Version 1.6.1-SNAPSHOT<br>
 Last updated 2016-04-01 16:34:45 +02:00
 </div>
 </div>
