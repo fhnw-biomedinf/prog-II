@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>Programming II</h1>
 <div class="details">
 <span id="author" class="author">Dominique Brodbeck &amp; Rahel Lüthy · Fachhochschule Nordwestschweiz · 2016</span><br>
-<span id="revnumber">version 1.6.1-SNAPSHOT</span>
+<span id="revnumber">version 1.8.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -580,7 +580,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_creating_and_positioning_gui_components">6.3. Creating and Positioning GUI Components</a></li>
 <li><a href="#_handling_user_events">6.4. Handling User Events</a></li>
 <li><a href="#_shapes_n_properties">6.5. Shapes&#8217;n&#8217;Properties</a></li>
-<li><a href="#_custom_drawing">6.6. Custom Drawing</a></li>
+<li><a href="#_custom_drawing_with_a_canvas">6.6. Custom Drawing with a Canvas</a></li>
 <li><a href="#gui-resources">6.7. Resources</a></li>
 </ul>
 </li>
@@ -4131,9 +4131,270 @@ stage.show();</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_custom_drawing">6.6. Custom Drawing</h3>
+<h3 id="_custom_drawing_with_a_canvas">6.6. Custom Drawing with a Canvas</h3>
 <div class="paragraph">
-<p>Coming soon to a browser near you&#8230;&#8203;</p>
+<p>Up to here we have covered all the branches in the sketch of the <a href="#component-hierarchy">JavaFX component hierarchy</a>, except the rightmost: the <code>Canvas</code>.
+It&#8217;s not a <code>Parent</code> and it&#8217;s not a <code>Shape</code>.
+What is it?
+The <code>Canvas</code> is a component that provides an empty rectangular image that you can write to.
+It provides a <code>GraphicsContext</code> that performs the rendering. You can call the methods of the <code>GraphicsContext</code> to define its rendering state, and to issue drawing commands.</p>
+</div>
+<div class="paragraph">
+<p>The basic steps are thus:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>create a <code>Canvas</code></p>
+</li>
+<li>
+<p>get a <code>GraphicsContext</code> from it</p>
+</li>
+<li>
+<p>issue drawing commands to draw basic geometric objects like lines and rectangles, etc.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code>Canvas</code> can be added to the scene graph (e.g., layout containers like the panes) like any other component that extends <code>Node</code>.</p>
+</div>
+<div class="paragraph">
+<p>What is the difference to drawing with <code>Shape</code> as we have seen in the previous section (e.g., <code>Circle</code>, <code>Rectangle</code>, etc.)?
+If we use a <code>Shape</code> node for drawing then each <code>Shape</code> is an individual object that extends the <code>Node</code> class.
+With this comes a lot of functionality such as geometric transformations, bounding rectangles, styling, and event listening infrastructure.
+Useful, but sometime also a burden.</p>
+</div>
+<div class="paragraph">
+<p>If we use a <code>Canvas</code> for drawing then there is only a single object. Drawing commands that are issued get converted to pixels on the canvas. A shape drawn like this therefore looses its identity after it is drawn. It can not be addressed and modified any more. It&#8217;s just pixels. If you want to change the color of a circle then you have to change the state of the rendering engine, and draw it again.</p>
+</div>
+<div class="paragraph">
+<p>Why would anyone want to do that?</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>For drawing complex shapes</p>
+</li>
+<li>
+<p>For performance reasons if there are a large number of shapes that don&#8217;t really need an identity</p>
+</li>
+<li>
+<p>If the data model underlying the drawing changes often (e.g. because objects appear or disappear)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code>Canvas</code> works like a state machine.
+It has rendering attributes (e.g., fill color, stroke color) that determine the current state of the rendering engine.
+All drawing commands are drawn using the current state.
+The state stays like it is until it is changed.</p>
+</div>
+<div class="paragraph">
+<p>Here is a simple example that draws a couple of lines onto the canvas:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Create the canvas</span>
+<span class="predefined-type">Canvas</span> canvas = <span class="keyword">new</span> <span class="predefined-type">Canvas</span>(<span class="integer">300</span>, <span class="integer">300</span>);
+
+<span class="comment">// Get the graphic context</span>
+GraphicsContext gc = canvas.getGraphicsContext2D();
+
+<span class="comment">// Draw a red line and then two blue lines, change the rendering state in-between</span>
+
+gc.setStroke(<span class="predefined-type">Color</span>.RED);
+gc.strokeLine(<span class="integer">200</span>, <span class="integer">100</span>, <span class="integer">100</span>, <span class="integer">200</span>);
+
+gc.setStroke(<span class="predefined-type">Color</span>.BLUE);
+gc.strokeLine(<span class="integer">100</span>, <span class="integer">100</span>, <span class="integer">200</span>, <span class="integer">200</span>);
+gc.strokeLine(<span class="integer">150</span>, <span class="integer">100</span>, <span class="integer">250</span>, <span class="integer">200</span>);
+
+<span class="comment">// Create the infrastructure</span>
+
+Pane rootPane = <span class="keyword">new</span> Pane();
+rootPane.getChildren().add(canvas);
+
+Scene scene = <span class="keyword">new</span> Scene(rootPane);
+stage.setScene(scene);
+stage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello JavaFX!</span><span class="delimiter">&quot;</span></span>);
+stage.show();</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/custom-drawing.png" alt="Custom drawing">
+</div>
+</div>
+<div class="paragraph">
+<p>The <a href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/canvas/GraphicsContext.html">documentation of the GraphicsContext class</a> has a list of all rendering attributes. The method summary also tells you about all the available drawing commands.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s try this out on a more interesting example.
+We want to create a number of points that are randomly distributed in the plane.
+When we move the mouse around in this plane, then we want to highlight all the points that are within a certain range of the mouse pointer.</p>
+</div>
+<div class="paragraph">
+<p>We model this problem with a very simple data structure, a <code>List&lt;Point2D&gt;</code> that holds the x and y coordinates of our points.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>Point2D</code> is an existing class in the <code>javafx.geometry</code> package
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Here is how we create the points:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="predefined-type">List</span>&lt;<span class="predefined-type">Point2D</span>&gt; createPoints(<span class="type">int</span> count, <span class="type">int</span> width, <span class="type">int</span> height) {
+    Supplier&lt;<span class="predefined-type">Point2D</span>&gt; randomPointCreator = () -&gt; {
+        <span class="type">double</span> x = <span class="predefined-type">Math</span>.random() * width;
+        <span class="type">double</span> y = <span class="predefined-type">Math</span>.random() * height;
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">Point2D</span>(x, y);
+    };
+    Stream&lt;<span class="predefined-type">Point2D</span>&gt; randomPoints = Stream.generate(randomPointCreator);
+    <span class="keyword">return</span> randomPoints.limit(count).collect(toList());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Point2D</code> class already knows how to calculate the distance to another point.
+Finding all the points that are within a given range of a center point is thus very easy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="predefined-type">List</span>&lt;<span class="predefined-type">Point2D</span>&gt; findPointsWithinRange(<span class="predefined-type">List</span>&lt;<span class="predefined-type">Point2D</span>&gt; points, <span class="predefined-type">Point2D</span> center, <span class="type">double</span> range) {
+    <span class="predefined-type">Predicate</span>&lt;<span class="predefined-type">Point2D</span>&gt; isWithinRange = point -&gt; center.distance(point) &lt; range;
+    <span class="keyword">return</span> points.stream().filter(isWithinRange).collect(toList());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now that the domain logic is in place, we can turn our attention to the drawing. First the points.
+Note how we don&#8217;t have to create any drawing objects (i.e., shapes).
+We simply iterate over our data model, and issue the appropriate drawing commands to get a custom drawing of the data (the points in this case).
+The custom drawing is very simple in this example, a filled circle, but we could replace this on the fly with something more elaborate.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="type">void</span> drawPoints(GraphicsContext gc, <span class="predefined-type">List</span>&lt;<span class="predefined-type">Point2D</span>&gt; points) {
+    gc.setFill(<span class="predefined-type">Color</span>.GREY);
+    <span class="keyword">for</span> (<span class="predefined-type">Point2D</span> point : points) {
+        gc.fillOval(point.getX(), point.getY(), POINT_SIZE, POINT_SIZE);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, we overdraw the highlighting for the things that are within range of the mouse.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="type">void</span> drawProbing(GraphicsContext gc, <span class="predefined-type">List</span>&lt;<span class="predefined-type">Point2D</span>&gt; points, <span class="predefined-type">Point2D</span> cursorPosition, <span class="type">double</span> range) {
+    <span class="predefined-type">List</span>&lt;<span class="predefined-type">Point2D</span>&gt; pointsWithinRange = findPointsWithinRange(points, cursorPosition, range);
+
+    gc.setStroke(<span class="predefined-type">Color</span>.RED);
+    <span class="keyword">for</span> (<span class="predefined-type">Point2D</span> point : pointsWithinRange) {
+        gc.strokeLine(cursorPosition.getX(), cursorPosition.getY(), point.getX(), point.getY());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It turns out that we also need to draw the background, as this is not cleared automatically between drawings. Of course.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="type">void</span> drawBackground(GraphicsContext gc) {
+    gc.setFill(<span class="predefined-type">Color</span>.WHITE);
+    gc.fillRect(<span class="integer">0</span>, <span class="integer">0</span>, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we are done and we can assemble everything into an application.
+It just redraws everything when the mouse is moved over the canvas.
+That&#8217;s it.</p>
+</div>
+<div class="paragraph">
+<p>Note how the core application code reads almost like a story.
+This is because we were careful about isolating functionality into separate methods, with method and variable names that tell what they do.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Create the canvas and get the graphic context</span>
+
+<span class="predefined-type">Canvas</span> canvas = <span class="keyword">new</span> <span class="predefined-type">Canvas</span>(WIDTH, HEIGHT);
+GraphicsContext gc = canvas.getGraphicsContext2D();
+
+<span class="comment">// Create the data model (the points)</span>
+
+<span class="predefined-type">List</span>&lt;<span class="predefined-type">Point2D</span>&gt; points = createPoints(POINT_COUNT, WIDTH, HEIGHT);
+
+<span class="comment">// Draw the points initially</span>
+
+drawBackground(gc);
+drawPoints(gc, points);
+
+<span class="comment">// Refresh the display when the mouse is moved over the canvas</span>
+
+canvas.setOnMouseMoved(event -&gt; {
+    drawBackground(gc);
+    drawPoints(gc, points);
+    <span class="predefined-type">Point2D</span> cursorPosition = <span class="keyword">new</span> <span class="predefined-type">Point2D</span>(event.getX(), event.getY());
+    drawProbing(gc, points, cursorPosition, PROBING_RANGE);
+});
+
+<span class="comment">// Create the infrastructure</span>
+
+Pane rootPane = <span class="keyword">new</span> Pane();
+rootPane.getChildren().add(canvas);
+
+Scene scene = <span class="keyword">new</span> Scene(rootPane);
+stage.setScene(scene);
+stage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello JavaFX Drawing!</span><span class="delimiter">&quot;</span></span>);
+stage.show();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We use static constants to avoid magic numbers and concentrate everything that can be customized in one single place.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> WIDTH = <span class="integer">500</span>;
+<span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> HEIGHT = <span class="integer">500</span>;
+<span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> PROBING_RANGE = <span class="integer">50</span>;
+<span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> POINT_COUNT = <span class="integer">200</span>;
+<span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">int</span> POINT_SIZE = <span class="integer">3</span>;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, here is the result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="06-gui/spider.png" alt="Custom drawing">
+</div>
+</div>
+<div class="paragraph">
+<p>Try it out! It is mesmerizing to move the mouse around and follow the spider&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>Here are the relevant sections in the official tutorials:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://docs.oracle.com/javase/8/javafx/graphics-tutorial/canvas.htm">Working with the Canvas API</a></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -4178,7 +4439,7 @@ Java Client Technologies Tutorials
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.6.1-SNAPSHOT<br>
+Version 1.8.0<br>
 Last updated 2016-04-01 16:34:45 +02:00
 </div>
 </div>
