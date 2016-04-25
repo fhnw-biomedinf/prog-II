@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><title>Programmieren II</title><meta content="yes" name="apple-mobile-web-app-capable" /><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" /><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport" /><link href="reveal.js/css/reveal.css" rel="stylesheet" /><link rel="stylesheet" href="reveal.js/css/theme/solarized.css" id="theme" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" /><link href="reveal.js/lib/css/zenburn.css" rel="stylesheet" /><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script><!-- Customizes slide appearance -->
+<style>
+
+    .reveal .slides {
+        text-align: left;
+    }
+
+    .reveal .slides section > * {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .reveal p {
+        line-height: 1;
+    }
+
+    .reveal pre {
+        width: 100%;
+        margin: auto;
+    }
+
+    .reveal section img {
+        border: none;
+        box-shadow: none;
+    }
+
+    .smaller div, .smaller ul, .smaller p {
+        font-size: 0.8em;
+    }
+
+    .small-table td p {
+        margin: 0;
+        font-size: small;
+    }
+
+    .ulist p {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .white {
+        color: white;
+    }
+
+    .solarized-blue {
+        color: #78bae6;
+    }
+
+    .solarized-violet {
+        color: #6c71c4;
+    }
+
+    .solarized-green {
+        color: #859900;
+    }
+
+    .white-on-pink p {
+        color: white;
+        background-color: #d33682;
+    }
+
+    /** Render like <h2> in solarized.css */
+    .title-like p {
+        font-family: 'League Gothic', sans-serif;
+        font-size: 2.11em;
+        text-transform: uppercase;
+    }
+
+    .center p {
+        text-align: center;
+    }
+
+    .right p {
+        text-align: right;
+    }
+
+</style></head><body><div class="reveal"><div class="slides"><section><h1>Programmieren II</h1><div class="paragraph"><p>Rahel Lüthy<br />
+<a href="mailto:rahel.luethy@fhnw.ch">rahel.luethy@fhnw.ch</a></p></div>
+<div class="paragraph"><p>27. April 2016</p></div><p><small></small></p></section>
+<section id="agenda"><h2>Agenda</h2><div class="ulist"><ul><li><p>Projektstart</p><div class="ulist"><ul><li><p>Anforderungen / Demo / Fragen</p></li><li><p>Wichtige Daten</p></li><li><p>Tipps</p></li></ul></div></li><li><p>Git Schnellbleiche</p></li></ul></div></section>
+<section data-background="images/accurat.jpg"><div class="paragraph"><p>Symbolbild: <a href="http://accurat.it" class="bare">http://accurat.it</a></p></div>
+<div class="paragraph title-like white-on-pink"><p>Demo Applikation</p></div></section>
+<section id="wichtige-daten"><h2>Wichtige Daten</h2><div class="paragraph"><p><br />
+Anmeldung 2er Gruppen via <a href="mailto:rahel.luethy@fhnw.ch">Email</a></p></div>
+<div class="paragraph"><p>&#8594; <strong>4. Mai 2016</strong>
+<br />
+<br />
+<br />
+<br />
+Projekt-Abgabe via <a href="https://moodle.fhnw.ch/course/view.php?id=9472">Moodle</a></p></div>
+<div class="paragraph"><p>&#8594; <strong>5. Juni 2016</strong></p></div></section>
+<section id="zuallererst"><h2>Zuallererst</h2><div class="ulist"><ul><li><p>Anforderungen verstehen (<a href="https://github.com/fhnw-biomedinf/prog-II-project">GitHub</a>)</p></li><li><p>Hinweise zum Projekt lesen (<a href="https://moodle.fhnw.ch/course/view.php?id=9472">Moodle</a>)</p></li></ul></div></section>
+<section id="teamarbeit"><h2>Teamarbeit</h2><div class="ulist"><ul><li><p>Gegenseitiges Erklären</p></li><li><p>Arbeitsteilung vs. Pair Programming</p></li></ul></div>
+<div class="imageblock" style="text-align: right"><div class="content"><img src="./images/rubber-duck.jpg" alt="Rubber Duck Debugging" width="25%" /></div><div class="title">Rubber Duck Debugging</div></div></section>
+<section id="inkrementelles-vorgehen"><h2>Inkrementelles Vorgehen</h2><div class="imageblock" style=""><div class="content"><img src="./images/minimum-viable-product.jpg" alt="minimum viable product" width="50%" /></div></div></section>
+<section id="tipps"><h2>Tipps</h2><div class="ulist"><ul><li><p><a href="http://bit.ly/1zDvFa2">Lessons Learned in Software Development</a></p></li><li><p>Tools nutzen (IDE, Debugger, JUnit, Git)</p></li><li><p><a href="https://medium.com/@giorgialupi">Papier &amp; Bleistift</a></p></li></ul></div>
+<div class="imageblock" style="text-align: center"><div class="content"><img src="./images/drawing.jpg" alt="drawing" width="50%" /></div></div></section>
+<section data-background="images/git.svg" data-background-size="600px"></section>
+<section id="git"><h2>Git</h2><div class="paragraph"><p><em>Eine freie Software zur verteilten Versionsverwaltung von Dateien</em>&#8201;&#8212;&#8201;<a href="https://de.wikipedia.org/wiki/Git">Wikipedia</a></p></div>
+<div class="imageblock" style="text-align: center"><div class="content"><img src="./images/git-problem.png" alt="git problem" /></div></div></section>
+<section id="wozu-git"><h2>Wozu Git?</h2><div class="ulist"><ul><li><p>Welches ist die aktuellste Version meines Projektes?</p></li><li><p>Welche Dateien waren von einer Änderung betroffen?</p></li><li><p>Wie sah die Datei xy vor einer Woche aus?</p></li><li><p>Wie können mehrere Personen gleichzeitig am Projekt arbeiten?</p></li></ul></div></section>
+<section id="git-ist-ein-biest"><h2>Git ist ein Biest</h2><div class="ulist"><ul><li><p>Ursprünglich für Linux Kernel Verwaltung</p></li><li><p>Steile Lernkurve</p></li><li><p>Es lohnt sich&#8201;&#8212;&#8201;Git ist ein <strong>grandioses</strong> Biest!</p></li></ul></div></section>
+<section id="heute-schnellbleiche"><h2>Heute: Schnellbleiche</h2><div class="ulist"><ul><li><p><strong>Ziel</strong>: Informierte Entscheidung&#8201;&#8212;&#8201;Projekt mit/ohne Git?</p></li><li><p>Begriffe</p></li><li><p>GitHub/IntelliJ Demo</p></li><li><p>Links</p><div class="ulist"><ul><li><p><a href="https://help.github.com/articles/github-glossary">GitHub Glossar</a></p></li><li><p><a href="https://yfain.github.io/Java4Kids/#_git_for_kids">Git For Kids</a></p></li><li><p><a href="http://git-scm.com/book/en/v2">Pro Git Book</a></p></li></ul></div></li></ul></div></section>
+<section id="git-commit"><h2>Git Commit</h2><div class="imageblock" style=""><div class="content"><img src="./images/git-commit.png" alt="git commit" /></div></div></section>
+<section id="git-commit-graph"><h2>Git Commit Graph</h2><div class="paragraph"><p><br />
+Commits sind über Referenzen verknüpft:</p></div>
+<div class="paragraph"><p><br />
+<br /></p></div>
+<div class="imageblock" style=""><div class="content"><img src="./images/git-commit-graph-pur.png" alt="git commit graph pur" width="60%" /></div></div></section>
+<section id="git-branch"><h2>Git Branch</h2><div class="ulist"><ul><li><p>Technisch: Referenz auf einen Commit</p></li><li><p>Salopp: Parallel-Version des Projektes</p></li><li><p>Haupt-Branch heisst <strong><code>master</code></strong> (Konvention)</p></li><li><p>Zukünftiger Parent-Commit heisst <strong><code>HEAD</code></strong></p></li></ul></div>
+<div class="imageblock" style=""><div class="content"><img src="./images/git-commit-graph.png" alt="git commit graph" width="40%" /></div><div class="title">Quelle: Pro Git Book</div></div>
+<div class="imageblock" style=""><div class="content"><img src="./images/git-commit-graph-master-only.png" alt="git commit graph master only" width="40%" /></div></div></section>
+<section id="git-repository"><h2>Git Repository</h2><div class="paragraph"><p>Ein Ordner, der unter Git Versionsverwaltung steht</p></div>
+<div class="paragraph"><p>Beispiel: Der Projekt-Ordner <code>prog-II-project</code></p></div>
+<div class="imageblock" style=""><div class="content"><img src="./images/git-repo.png" alt="git repo" width="60%" /></div></div></section>
+<section id="github"><h2>GitHub</h2><div class="ulist"><ul><li><p>Repository Hosting Service</p></li><li><p>Web Interface</p></li><li><p>Open Source #1</p></li><li><p>Alternativen: BitBucket, GitLab, &#8230;&#8203;</p></li></ul></div>
+<div class="imageblock" style="text-align: right"><div class="content"><img src="./images/github.png" alt="github" /></div></div></section>
+<section id="github-fork-clone"><h2>GitHub Fork/Clone</h2><div class="imageblock" style=""><div class="content"><img src="./images/github-clone.png" alt="github clone" /></div></div></section>
+<section id="github-pull-commit-push"><h2>GitHub Pull/Commit/Push</h2><div class="imageblock" style=""><div class="content"><img src="./images/github-pull-commit-push.png" alt="github pull commit push" /></div></div></section>
+<section id="github-intellij-demo"><h2>GitHub / IntelliJ Demo</h2><div class="paragraph"><p>VCS &gt; Checkout from Version Control &gt; GitHub</p></div>
+<div class="paragraph"><p><a href="https://www.jetbrains.com/help/idea/2016.1/cloning-a-repository-from-github.html?origin=old_help">Official IntelliJ Help</a></p></div></section>
+<section id="projekt-setup-mit-git"><h2>Projekt-Setup mit Git</h2><div class="olist arabic"><ol class="arabic"><li><p>GitHub Account</p></li><li><p>Fork <a href="https://github.com/fhnw-biomedinf/prog-II-project">fhnw-biomedinf/prog-II-project</a></p></li><li><p>Team Setup (Settings)</p></li><li><p>IntelliJ Checkout (aka Clone)</p></li></ol></div></section>
+<section id="projekt-setup-ohne-git"><h2>Projekt-Setup ohne Git</h2><div class="imageblock" style=""><div class="content"><img src="./images/github-zip.png" alt="github zip" /></div></div></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Reveal.initialize({
+  // Display controls in the bottom right corner
+  controls: true,
+  // Display a presentation progress bar
+  progress: true,
+  // Display the page number of the current slide
+  slideNumber: true,
+  // Push each slide change to the browser history
+  history: true,
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+  // Enable the slide overview mode
+  overview: true,
+  // Vertical centering of slides
+  center: false,
+  // Enables touch navigation on devices with touch input
+  touch: true,
+  // Loop the presentation
+  loop: false,
+  // Change the presentation direction to be RTL
+  rtl: false,
+  // Turns fragments on and off globally
+  fragments: true,
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+  // Enable slide navigation via mouse wheel
+  mouseWheel: false,
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+  // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
+  // NOTE setting the theme in the config no longer works in reveal.js 3.x
+  //theme: Reveal.getQueryHash().theme || 'solarized',
+  // Transition style (e.g., none, fade, slide, convex, concave, zoom)
+  transition: Reveal.getQueryHash().transition || 'linear',
+  // Transition speed (e.g., default, fast, slow)
+  transitionSpeed: 'default',
+  // Transition style for full page slide backgrounds (e.g., none, fade, slide, convex, concave, zoom)
+  backgroundTransition: 'fade',
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+  // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
+  parallaxBackgroundImage: '',
+  // Parallax background size in CSS syntax (e.g., "2100px 900px")
+  parallaxBackgroundSize: '',
+
+  // The "normal" size of the presentation, aspect ratio will be preserved
+  // when the presentation is scaled to fit different resolutions. Can be
+  // specified using percentage units.
+  width: 960,
+  height: 700,
+
+  // Factor of the display size that should remain empty around the content
+  margin: 0.1,
+
+  // Bounds for smallest/largest possible scale to apply to content
+  minScale: 0.2,
+  maxScale: 1.5,
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+      { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});</script></body></html>

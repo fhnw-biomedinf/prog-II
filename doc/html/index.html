@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>Programming II</h1>
 <div class="details">
 <span id="author" class="author">Dominique Brodbeck &amp; Rahel Lüthy · Fachhochschule Nordwestschweiz · 2016</span><br>
-<span id="revnumber">version 1.8.0</span>
+<span id="revnumber">version 1.9.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -4081,11 +4081,10 @@ shapePane.getChildren().add(circle);
 
 circle.radiusProperty().bind(slider.valueProperty());
 
-<span class="comment">// The Pane class also has properties, but we can not directly bind to them here</span>
-<span class="comment">// as we need to transform the value that we get.</span>
-<span class="comment">// This always centers the circle in the pane.</span>
-shapePane.widthProperty().addListener((observableValue, number, t1) -&gt; circle.setCenterX(shapePane.getWidth() / <span class="integer">2</span>));
-shapePane.heightProperty().addListener((observableValue, number, t1) -&gt; circle.setCenterY(shapePane.getHeight() / <span class="integer">2</span>));
+<span class="comment">// Center circle on the pane</span>
+
+circle.centerXProperty().bind(shapePane.widthProperty().divide(<span class="integer">2</span>));
+circle.centerYProperty().bind(shapePane.heightProperty().divide(<span class="integer">2</span>));
 
 circle.setOnMouseEntered(event -&gt; {
     circle.setStrokeWidth(<span class="integer">5</span>);
@@ -4165,7 +4164,7 @@ With this comes a lot of functionality such as geometric transformations, boundi
 Useful, but sometime also a burden.</p>
 </div>
 <div class="paragraph">
-<p>If we use a <code>Canvas</code> for drawing then there is only a single object. Drawing commands that are issued get converted to pixels on the canvas. A shape drawn like this therefore looses its identity after it is drawn. It can not be addressed and modified any more. It&#8217;s just pixels. If you want to change the color of a circle then you have to change the state of the rendering engine, and draw it again.</p>
+<p>If we use a <code>Canvas</code> for drawing then there is only a single object. Drawing commands that are issued get converted to pixels on the canvas immediately. A shape drawn like this therefore looses its identity after it is drawn. It can not be addressed and modified any more. It&#8217;s just pixels. If you want to change the color of a circle then you have to change the state of the rendering engine, and draw it again.</p>
 </div>
 <div class="paragraph">
 <p>Why would anyone want to do that?</p>
@@ -4439,7 +4438,7 @@ Java Client Technologies Tutorials
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.8.0<br>
+Version 1.9.0<br>
 Last updated 2016-04-01 16:34:45 +02:00
 </div>
 </div>
