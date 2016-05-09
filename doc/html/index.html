@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>Programming II</h1>
 <div class="details">
 <span id="author" class="author">Dominique Brodbeck &amp; Rahel Lüthy · Fachhochschule Nordwestschweiz · 2016</span><br>
-<span id="revnumber">version 1.9.0</span>
+<span id="revnumber">version 1.10.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -582,6 +582,11 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_shapes_n_properties">6.5. Shapes&#8217;n&#8217;Properties</a></li>
 <li><a href="#_custom_drawing_with_a_canvas">6.6. Custom Drawing with a Canvas</a></li>
 <li><a href="#gui-resources">6.7. Resources</a></li>
+</ul>
+</li>
+<li><a href="#_appendix">7. Appendix</a>
+<ul class="sectlevel2">
+<li><a href="#_javafx_chart_tips_tricks">7.1. JavaFX Chart Tips &amp; Tricks</a></li>
 </ul>
 </li>
 </ul>
@@ -4429,6 +4434,162 @@ Java Client Technologies Tutorials
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_appendix">7. Appendix</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_javafx_chart_tips_tricks">7.1. JavaFX Chart Tips &amp; Tricks</h3>
+<div class="paragraph">
+<p>This section provides some help when working with JavaFX <code>Chart</code> components.
+Individual topics are inspired by the requirements of the <a href="https://github.com/fhnw-biomedinf/prog-II-project">prog-II-project</a>.</p>
+</div>
+<div class="sect3">
+<h4 id="_charts_with_points_lines">7.1.1. Charts with points &amp; lines</h4>
+<div class="paragraph">
+<p>The <code>ScatterChart</code> component can be used to display data points in a series.
+Unfortunately, it does not support line connections.</p>
+</div>
+<div class="paragraph">
+<p>One simple approach to creating a chart with points <strong>and</strong> toggleable lines, is to stack a <code>ScatterChart</code> and a <code>LineChart</code>.
+Toggling the visibility of the <code>LineChart</code> will then show or hide the line as required.</p>
+</div>
+<div class="paragraph">
+<p>The <code>StackPane</code> class provides layout management to stack multiple layers on top of each other.
+Note that the chart in the top layer must have a transparent background in order for the underlying chart to be visible:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">LineChart&lt;<span class="predefined-type">Number</span>, <span class="predefined-type">Number</span>&gt; lineChart = createLineChart(model);
+ScatterChart&lt;<span class="predefined-type">Number</span>, <span class="predefined-type">Number</span>&gt; scatterChart = createScatterChart(model);
+
+scatterChart.lookup(<span class="string"><span class="delimiter">&quot;</span><span class="content">.chart-plot-background</span><span class="delimiter">&quot;</span></span>).setStyle(<span class="string"><span class="delimiter">&quot;</span><span class="content">-fx-background-color: transparent</span><span class="delimiter">&quot;</span></span>);
+
+StackPane stackPane = <span class="keyword">new</span> StackPane(lineChart, scatterChart);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, one could use a <code>LineChart</code> with two redundant data series (one for the points, one for the line).
+With this approach, fancier CSS is needed to control the visibility to the points and lines.
+Further details are provided on <a href="http://stackoverflow.com/questions/26803380/how-to-combine-scatter-chart-with-line-chart-to-show-line-of-regression-javafx">Stack Overflow</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_line_connection_order">7.1.2. Line connection order</h4>
+<div class="paragraph">
+<p>By default, a <code>LineChart</code> sorts its values by the natural order of its x-axis.
+Often, it is desirable to connect the points in the order in which they were added to the data series.
+This can be achieved by turning off axis sorting:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">lineChart.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_controlling_point_appearance_through_custom_nodes">7.1.3. Controlling point appearance through custom nodes</h4>
+<div class="paragraph">
+<p>The <code>ScatterChart</code> component uses default shapes to display individual data points.
+While it is possible to style these shapes though CSS, it is also possible to use any <code>Node</code> class for point rendering.
+Using a <code>Circle</code> node allows to programmatically control the radius and color of data points:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">XYChart.Series&lt;<span class="predefined-type">Number</span>, <span class="predefined-type">Number</span>&gt; series = <span class="keyword">new</span> XYChart.Series&lt;&gt;();
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="integer">0</span>; i &lt; valueCount; i++) {
+
+    <span class="predefined-type">Double</span> x = xValues.get(i);
+    <span class="predefined-type">Double</span> y = yValues.get(i);
+    XYChart.Data&lt;<span class="predefined-type">Number</span>, <span class="predefined-type">Number</span>&gt; dataPoint = <span class="keyword">new</span> XYChart.Data&lt;&gt;(x, y);
+
+    Circle circle = <span class="keyword">new</span> Circle(); <i class="conum" data-value="1"></i><b>(1)</b>
+    circle.setRadius(<span class="integer">10</span>); <i class="conum" data-value="2"></i><b>(2)</b>
+    circle.setFill(<span class="predefined-type">Color</span>.PINK); <i class="conum" data-value="3"></i><b>(3)</b>
+    dataPoint.setNode(circle); <i class="conum" data-value="4"></i><b>(4)</b>
+
+    series.getData().add(dataPoint);
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Create a custom <code>Circle</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Control its radius</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Control its color</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Tell JavaFX to use the custom circle for rendering</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+As usual, using <code>circle.radiusProperty().bind(..)</code> and <code>circle.fillProperty().bind(..)</code> instead of the simple setters allows to dynamically update the values based on the state of e.g. a <code>Slider</code> or a <code>ColorPicker</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_auto_ranging_axes">7.1.4. Auto-ranging axes</h4>
+<div class="paragraph">
+<p>By default, a <code>NumberAxis</code> automatically adjusts its range based on the current data series.
+Unfortunately, the axis has a setting to always include the <code>0</code> value, which can lead to confusing auto-ranging behavior.
+It might thus be desirable to turn off this setting:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">NumberAxis axis = <span class="keyword">new</span> NumberAxis();
+axis.setForceZeroInRange(<span class="predefined-constant">false</span>);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_controlling_histogram_appearance">7.1.5. Controlling histogram appearance</h4>
+<div class="paragraph">
+<p>The <code>BarChart</code> component allows to display histogram-like charts.
+By default, the bars are displayed with a horizontal gap:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="07-appendix/histogram-with-gaps.png"><img src="07-appendix/histogram-with-gaps.png" alt="Histogram with gaps" width="50%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>If desired, these gaps can be eliminated as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">histogram.setBarGap(<span class="integer">0</span>);
+histogram.setCategoryGap(<span class="integer">0</span>);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The chart then looks like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="07-appendix/histogram-without-gaps.png"><img src="07-appendix/histogram-without-gaps.png" alt="Histogram without gaps" width="50%"></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footnotes">
 <hr>
@@ -4438,8 +4599,8 @@ Java Client Technologies Tutorials
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.9.0<br>
-Last updated 2016-04-01 16:34:45 +02:00
+Version 1.10.0<br>
+Last updated 2016-05-09 08:50:16 +02:00
 </div>
 </div>
 </body>
