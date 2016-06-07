@@ -1,0 +1,320 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><title>Programmieren II</title><meta content="yes" name="apple-mobile-web-app-capable" /><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" /><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport" /><link href="reveal.js/css/reveal.css" rel="stylesheet" /><link rel="stylesheet" href="reveal.js/css/theme/solarized.css" id="theme" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" /><link href="reveal.js/lib/css/zenburn.css" rel="stylesheet" /><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script><!-- Customizes slide appearance -->
+<style>
+
+    .reveal .slides {
+        text-align: left;
+    }
+
+    .reveal .slides section > * {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .reveal p {
+        line-height: 1;
+    }
+
+    .reveal pre {
+        width: 100%;
+        margin: auto;
+    }
+
+    .reveal section img {
+        border: none;
+        box-shadow: none;
+    }
+
+    .smaller div, .smaller ul, .smaller p {
+        font-size: 0.8em;
+    }
+
+    .small-table td p {
+        margin: 0;
+        font-size: small;
+    }
+
+    .ulist p {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .white {
+        color: white;
+    }
+
+    .solarized-blue {
+        color: #78bae6;
+    }
+
+    .solarized-violet {
+        color: #6c71c4;
+    }
+
+    .solarized-green {
+        color: #859900;
+    }
+
+    .white-on-pink p {
+        color: white;
+        background-color: #d33682;
+    }
+
+    /** Render like <h2> in solarized.css */
+    .title-like p {
+        font-family: 'League Gothic', sans-serif;
+        font-size: 2.11em;
+        text-transform: uppercase;
+    }
+
+    .center p {
+        text-align: center;
+    }
+
+    .right p {
+        text-align: right;
+    }
+
+</style></head><body><div class="reveal"><div class="slides"><section><h1>Programmieren II</h1><div class="paragraph"><p>Rahel Lüthy<br />
+<a href="mailto:rahel.luethy@fhnw.ch">rahel.luethy@fhnw.ch</a></p></div>
+<div class="paragraph"><p>08. Juni 2016</p></div><p><small></small></p></section>
+<section id="agenda"><h2>Agenda</h2><div class="ulist"><ul><li><p>Project Questions</p></li><li><p>Summary</p></li><li><p>Exam</p></li></ul></div></section>
+<section id="project" data-background="#78bae6"><h2>Project</h2><div class="paragraph white"><p>Questions?</p></div></section>
+<section id="summary"><h2>Summary</h2><div class="paragraph"><p><a href="http://fhnw-biomedinf.github.io/prog-II/doc/html" class="bare">http://fhnw-biomedinf.github.io/prog-II/doc/html</a></p></div>
+<div class="ulist"><ul><li><p>Data Structures</p></li><li><p>Input / Output</p></li><li><p>Object-Oriented Programming (OOP)</p></li><li><p>Functional Programming (FP)</p></li><li><p>Graphical User Interfaces (GUIs)</p></li></ul></div></section>
+<section id="data-structures" data-background="#78bae6"><h2>Data Structures</h2><div class="ulist white"><ul><li><p>List, Set, Map</p></li><li><p>Generics</p></li><li><p>Looping</p></li></ul></div></section>
+<section id="list-set-map"><h2>List, Set, Map</h2><div class="paragraph"><p>Special-purpose alternatives to raw arrays</p></div>
+<div class="paragraph"><p>Interfaces:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">List&lt;E&gt;
+Set&lt;E&gt;
+Map&lt;K,V&gt;</code></pre></div></div>
+<div class="paragraph"><p>Common implementations:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">ArrayList&lt;E&gt;
+HashSet&lt;E&gt;
+HashMap&lt;K,V&gt;</code></pre></div></div></section>
+<section id="generics"><h2>Generics</h2><div class="paragraph"><p>Entry types can (and should!) be parametrized:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">List&lt;String&gt; list = new ArrayList&lt;&gt;();
+Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+Map&lt;Integer, String&gt; map = new HashMap&lt;&gt;();</code></pre></div></div>
+<div class="paragraph"><p><br />
+<br />
+Allows compiler to prevent errors:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">List&lt;String&gt; list = new ArrayList&lt;&gt;();
+list.add(new Integer(42)); // COMPILE ERROR</code></pre></div></div></section>
+<section id="looping"><h2>Looping</h2><div class="paragraph"><p>The "for each" loop provides a convenient way to iterate over entries:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">for (String name : Arrays.asList("bill", "linda")) {
+    // ...
+}</code></pre></div></div>
+<div class="paragraph"><p>Note: <code>HashSet</code> and <code>HashMap</code> make no guarantee with respect to iteration order</p></div></section>
+<section id="input-output" data-background="#78bae6"><h2>Input / Output</h2><div class="ulist white"><ul><li><p>Reading Text</p></li><li><p>Creating &amp; Formatting Text</p></li><li><p>Writing Text</p></li><li><p>Files</p></li></ul></div></section>
+<section id="reading-text"><h2>Reading Text</h2><div class="paragraph"><p>The <code>Scanner</code> class:</p></div>
+<div class="ulist"><ul><li><p>is convenient when reading from text (file)</p></li><li><p>provides helper methods <code>hasNext&#8230;&#8203;/next&#8230;&#8203;</code></p></li></ul></div></section>
+<section id="creating-formatting-text"><h2>Creating &amp; Formatting Text</h2><div class="paragraph"><p>Your friends:</p></div>
+<div class="ulist"><ul><li><p><code>StringBuilder</code></p></li><li><p><code>String.format</code></p></li></ul></div></section>
+<section id="writing-text"><h2>Writing Text</h2><div class="paragraph"><p>The <code>PrintWriter</code> class:</p></div>
+<div class="ulist"><ul><li><p>is convenient when writing to text file</p></li><li><p>provides helper methods <code>print/println</code></p></li></ul></div></section>
+<section id="files"><h2>Files</h2><div class="ulist"><ul><li><p><code>File</code> describes a file or directory</p></li><li><p><code>FileChooser</code> allows to select a <code>File</code> through a dialog</p></li></ul></div></section>
+<section id="object-oriented-programming" data-background="#78bae6"><h2>Object-Oriented Programming</h2><div class="ulist white"><ul><li><p>Classes &amp; Objects</p></li><li><p>Composition</p></li><li><p>Inheritance</p></li><li><p>Encapsulation</p></li><li><p>Enum Types</p></li><li><p>Interfaces</p></li></ul></div></section>
+<section><section id="classes"><h2>Classes</h2><div class="paragraph"><p>A class is a template for manufacturing objects:
+<br />
+<br /></p></div><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">class Car {
+    // member declarations (fields, methods)
+}
+
+Car ford = new Car();</code></pre></div></div></section><section id="classes-2"><h2>Classes</h2><div class="ulist"><ul><li><p>A class typically consists of data and methods to access and/or manipulate that data.</p></li><li><p>Encapsulation is the act of hiding implementation details.</p></li><li><p>Encapsulation enables changes in the implementation without affecting users of a class.</p></li></ul></div></section></section>
+<section id="objects"><h2>Objects</h2><div class="paragraph"><p>An object is an instance of a class:
+<br /></p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">class Car {
+    // member declarations (fields, methods)
+}
+
+Car ford = new Car();</code></pre></div></div>
+<div class="paragraph"><p>In this example:</p></div>
+<div class="ulist"><ul><li><p><code>new</code> creates an instance of <code>Car</code></p></li><li><p><code>new</code> calls default no-argument constructor of <code>Car</code></p></li><li><p><code>ford</code> is a variable of type <code>Car</code></p></li><li><p><code>ford</code> references an object/instance of class <code>Car</code></p></li></ul></div></section>
+<section id="objects-2"><h2>Objects</h2><div class="ulist"><ul><li><p>Each object has its own set of instance variables ("born" when object is created)</p></li><li><p>Conventions:</p><div class="ulist"><ul><li><p>Mutator methods (e.g. <code>setName(…)</code>) change object state</p></li><li><p>Accessor methods (e.g. <code>getName()</code>) access/expose object state</p></li></ul></div></li></ul></div></section>
+<section id="constructors"><h2>Constructors</h2><div class="ulist"><ul><li><p>The name of a constructor is the same as the name of the class</p></li><li><p>A constructor is invoked when an object is created with the <code>new</code> operator</p></li><li><p>A constructor initializes an object&#8217;s instance variables</p></li><li><p>A class can have multiple constructors</p></li><li><p>The compiler picks the constructor that matches the construction arguments</p></li></ul></div></section>
+<section id="composition"><h2>Composition</h2><div class="paragraph"><p>Re-using code by stating a "has-a" relationship:
+<br />
+<br /></p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">class Address {
+
+    private String street;
+
+    // more member declarations
+}
+
+class Person {
+
+    private Address address;
+
+    // more member declarations
+}</code></pre></div></div></section>
+<section id="inheritance"><h2>Inheritance</h2><div class="paragraph"><p>Re-using code by stating an "is-a" relationship:
+<br />
+<br /></p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">class Vehicle {
+    // member declarations
+}
+class Car extends Vehicle {
+    // provide own member declarations
+    // inherit accessible members from Vehicle
+    // override non-final members of Vehicle
+}</code></pre></div></div>
+<div class="paragraph"><p>In Java:</p></div>
+<div class="ulist"><ul><li><p>At most one class can be declared after the <code>extends</code> keyword (no multiple inheritance)</p></li><li><p>All classes implicitly extend <code>Object</code></p></li></ul></div></section>
+<section id="encapsulation"><h2>Encapsulation</h2><div class="paragraph"><p>Hiding implementation details:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">class Person {
+
+    private int age;
+
+    public boolean isOldEnough() {
+        return age &gt;= 16;
+    }
+
+}</code></pre></div></div>
+<div class="paragraph"><p>Allows internal changes without affecting usages:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public boolean isOldEnough() {
+    return age &gt;= 18;
+}</code></pre></div></div></section>
+<section id="enum-types"><h2>Enum Types</h2><div class="paragraph"><p>The <code>enum</code> keyword allows to define a type with a fixed number of possible values:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">enum Season { WINTER, SPRING, SUMMER, FALL }</code></pre></div></div>
+<div class="paragraph"><p>Allows compiler to prevent errors:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">void isChristmasSeason(Season season) {
+    return Season.WINTER == season;
+}
+
+isChristmasSeason(Season.SUMMER); // false
+isChristmasSeason(Season.WINTER); // true
+isChristmasSeason("Whenever");    // COMPILE ERROR</code></pre></div></div></section>
+<section id="interfaces"><h2>Interfaces</h2><div class="paragraph"><p>Interfaces specify a contract ("what") without providing an implementation ("how")&#185;:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">interface DataModelReader {
+    DataModel read(File file);
+}</code></pre></div></div>
+<div class="paragraph"><p>They allow to write generic, re-usable code that supports polymorphism:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">DataModelReader reader = resolveReader(file.getName());
+DataModel model = reader.read(file);</code></pre></div></div>
+<div class="paragraph"><p><br />
+<br />
+<br />
+&#185; As of Java 8, interface can provide default implementations</p></div></section>
+<section id="interface-implementations"><h2>Interface Implementations</h2><div class="paragraph"><p>By implementing an interface, classes declare to fulfill a contract.
+They do so by providing the required method body ("how"):</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">class LineBasedDataReader implements DataModelReader {
+    @Override
+    public DataModel read(File file) {
+        // line-based read implementation
+    }
+}
+
+class ColumnBasedDataReader implements DataModelReader {
+    @Override
+    public DataModel read(File file) {
+        // column-based read implementation
+    }
+}</code></pre></div></div>
+<div class="paragraph"><p>Note: In Java, classes can implement 0 to n interfaces</p></div></section>
+<section id="lambda-expressions"><h2>Lambda Expressions</h2><div class="paragraph"><p>Lambda expressions are a special syntax to implement single-method interfaces:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">interface CheckPerson {
+    boolean test(Person p);
+}
+
+CheckPerson fullAgeCheck = person -&gt; person.getAge() &gt;= 18;
+
+CheckPerson pointlessCheck = person -&gt; true;
+
+CheckPerson secretServiceCheck = person -&gt;
+                person.getFirstName().equalsIgnoreCase("james") &amp;&amp;
+                        person.getLastName().equalsIgnoreCase("bond");</code></pre></div></div></section>
+<section id="functional-programming" data-background="#78bae6"><h2>Functional Programming</h2><div class="ulist white"><ul><li><p>FP is a certain style of building and structuring programs (OOP is another such style)</p></li><li><p>FP uses functions as re-usable building blocks</p></li><li><p>Functions are pieces of code that accept input and produce output</p></li><li><p>Like in math, functions should have no side effects: Given the same input, they produce the same output</p></li><li><p>Java 8 combines FP with OOP</p></li></ul></div></section>
+<section id="guis" data-background="#78bae6"><h2>GUIs</h2><div class="ulist white"><ul><li><p>Components</p></li><li><p>Containers</p></li><li><p>Events</p></li><li><p>Properties</p></li><li><p>Custom Drawing</p></li></ul></div></section>
+<section id="gui-components"><h2>GUI Components</h2><div class="paragraph"><p>JavaFX provides a re-usable hierarchy of components:</p></div>
+<div class="imageblock" style=""><div class="content"><img src="./images/javafx-components-overview.png" alt="javafx components overview" /></div></div></section>
+<section id="gui-containers"><h2>GUI Containers</h2><div class="ulist"><ul><li><p>GUI components can be added to containers (e.g. <code>Pane</code>)</p></li><li><p>Many containers are components themselves, allowing for complex/nested hierarchies</p></li><li><p>Different <code>Pane</code> implementations provide different visual arrangement/resizing behavior ("layout management"):</p><div class="ulist"><ul><li><p><code>VBox</code></p></li><li><p><code>HBox</code></p></li><li><p><code>GridPane</code></p></li><li><p><code>StackPane</code></p></li><li><p>etc.</p></li></ul></div></li></ul></div></section>
+<section id="gui-events"><h2>GUI Events</h2><div class="paragraph"><p>GUI components are observable through listeners, allowing to react to user interactions:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Button button = new Button("Please Click");
+button.setOnAction(event -&gt; {
+    System.out.println("Clicked!");
+});</code></pre></div></div></section>
+<section id="properties"><h2>Properties</h2><div class="paragraph"><p>Bindings allow to express relationships between properties of JavaFX nodes:</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Slider slider = new Slider(0, 200, 100);
+Circle circle = new Circle(150, 150, slider.getValue());
+circle.radiusProperty().bind(slider.valueProperty());</code></pre></div></div></section>
+<section id="custom-drawing"><h2>Custom Drawing</h2><div class="ulist"><ul><li><p>The <code>Canvas</code> component provides an empty rectangular image</p></li><li><p>It provides a <code>GraphicsContext</code> that can be used to issue drawing commands</p></li><li><p>A <code>Canvas</code> can be added to the scene graph like any other node</p></li></ul></div></section>
+<section id="exam" data-background="#78bae6"><h2>Exam</h2><div class="ulist white"><ul><li><p>Mostly multiple choice</p></li><li><p>Some simple programming tasks</p></li><li><p><em>Hilfsblatt</em> (Moodle)</p></li></ul></div></section>
+<section id="danke" data-background="#6c71c4"><h2>Danke</h2><div class="ulist white"><ul><li><p>Feedback willkommen</p></li><li><p>Alles Gute für die Prüfung!</p></li></ul></div></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Reveal.initialize({
+  // Display controls in the bottom right corner
+  controls: true,
+  // Display a presentation progress bar
+  progress: true,
+  // Display the page number of the current slide
+  slideNumber: true,
+  // Push each slide change to the browser history
+  history: true,
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+  // Enable the slide overview mode
+  overview: true,
+  // Vertical centering of slides
+  center: false,
+  // Enables touch navigation on devices with touch input
+  touch: true,
+  // Loop the presentation
+  loop: false,
+  // Change the presentation direction to be RTL
+  rtl: false,
+  // Turns fragments on and off globally
+  fragments: true,
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+  // Enable slide navigation via mouse wheel
+  mouseWheel: false,
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+  // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
+  // NOTE setting the theme in the config no longer works in reveal.js 3.x
+  //theme: Reveal.getQueryHash().theme || 'solarized',
+  // Transition style (e.g., none, fade, slide, convex, concave, zoom)
+  transition: Reveal.getQueryHash().transition || 'linear',
+  // Transition speed (e.g., default, fast, slow)
+  transitionSpeed: 'default',
+  // Transition style for full page slide backgrounds (e.g., none, fade, slide, convex, concave, zoom)
+  backgroundTransition: 'fade',
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+  // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
+  parallaxBackgroundImage: '',
+  // Parallax background size in CSS syntax (e.g., "2100px 900px")
+  parallaxBackgroundSize: '',
+
+  // The "normal" size of the presentation, aspect ratio will be preserved
+  // when the presentation is scaled to fit different resolutions. Can be
+  // specified using percentage units.
+  width: 960,
+  height: 700,
+
+  // Factor of the display size that should remain empty around the content
+  margin: 0.1,
+
+  // Bounds for smallest/largest possible scale to apply to content
+  minScale: 0.2,
+  maxScale: 1.5,
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+      { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});</script></body></html>
